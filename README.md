@@ -11,7 +11,7 @@ Provides common shared [Gulp](http://gulpjs.com/) tasks for [TyphonJS](https://g
 
 The following tasks are available and defined in `typhon-core-gulptasks`:
 - [esdocs](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) support and outputs to the location specified by `esdoc.json`.
-- [eslint](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/eslint.js) - Runs ESLint using `.eslintrc` outputting to console and failing on any errors. 
+- [eslint](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/eslint.js) - Runs ESLint using `.eslintrc` outputting to console and failing on any errors. Please note that comments are stripped as it is converted to pure JSON and only comments between `/* ... */` are supported.
 - [git-push-clear-config](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success clears JSPM `config.js` of `map` & `paths` entries performing a `git commit` as necessary before executing `git push`. 
 - [git-push](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success executes `git push`. 
 - [jspm-bundle](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Creates one or more bundles defined in `./bundle-config.js` or `./bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
