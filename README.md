@@ -11,7 +11,7 @@ Provides common shared [Gulp](http://gulpjs.com/) tasks for [TyphonJS](https://g
 
 The following tasks are available and defined in `typhon-core-gulptasks`:
 - [esdocs](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) support and outputs to the location specified by `esdoc.json`.
-- [eslint](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/eslint.js) - Runs ESLint using `.eslintrc` outputting to console and failing on any errors. Please note that comments are stripped as `.eslintrc` is converted to pure JSON and only comments between `/* ... */` are supported.
+- [eslint](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/eslint.js) - Runs [ESLint](http://eslint.org/) using `.eslintrc` outputting to console and failing on any errors. Please note that comments are stripped as `.eslintrc` is converted to pure JSON and only comments between `/* ... */` are supported.
 - [git-push-clear-config](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success clears JSPM `config.js` of `map` & `paths` entries performing a `git commit` as necessary before executing `git push`. 
 - [git-push](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success executes `git push`. 
 - [jspm-bundle](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Creates one or more bundles defined in `./config/bundle-config.js` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
@@ -47,6 +47,10 @@ require('typhon-core-gulptasks')(gulp, { rootPath: __dirname, srcGlob: './src/**
 
 - `rootPath` defines the base path where JSPM `config.js` is located.
 - `srcGlob` defines a [string or array of strings](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpsrcglobs-options) for the location of local sources to be manipulated by the following tasks: `eslint`.
+
+The `esdoc` task requires a valid [esdoc.json](https://esdoc.org/config.html) file in the root project path.
+
+The `eslint` task requires a valid [.eslintrc](http://eslint.org/docs/user-guide/configuring.html) file in the root project path. Please note that comments are stripped as `.eslintrc` is converted to pure JSON and only comments between `/* ... */` are supported.
 
 The `jspm-bundle` task requires two configuration files to be defined in `./config`:
 - `./config/bundle-config.js` - Provides the main bundle configuration.
