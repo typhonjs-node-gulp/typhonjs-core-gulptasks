@@ -47,4 +47,4 @@ require('typhon-core-gulptasks')(gulp, { rootPath: __dirname, srcGlob: './src/**
 - `rootPath` defines the base path where JSPM `config.js` is located.
 - `srcGlob` defines a [string or array of strings](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpsrcglobs-options) for the location of local sources to be manipulated by the following tasks: `eslint`.
 
-For a comprehensive demo see the [Backbone-Parse-ES6-Demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhon-core-gulptasks`. The tutorials in this repo give a full description of how to use `typhon-core-gulptasks`.
+For a comprehensive demo and tutorial see the [Backbone-Parse-ES6-Demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhon-core-gulptasks`. 
