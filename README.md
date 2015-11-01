@@ -79,6 +79,10 @@ The following is an example entry:
 ]
 ```
 
-Please note that `extraConfig` can be a string / file path relative to the project root path that defines an additional JSPM styled configuration file like `config.js` (wrapped in a System.config({ ... }); statement). This is particularly useful to define additional user supplied mapped paths that incorporate normalized JSPM package paths resolved from `config.js`. If an object literal / hash is supplied it is loaded directly.
+Please note that `extraConfig` can be a string / file path relative to the project root path that defines an additional JSPM styled configuration file like `config.js` (wrapped in a `System.config({ ... });` statement). This is particularly useful to define additional user supplied mapped paths that incorporate normalized JSPM package paths resolved from `config.js`. If an object literal / hash is supplied it is loaded directly.
 
-For a comprehensive demo and tutorial see the [Backbone-Parse-ES6-Demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhon-core-gulptasks`.
+For a comprehensive demo and tutorial see the [backbone-parse-es6-demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhon-core-gulptasks`.
+
+typhon-core-gulptasks (c) 2015-present Michael Leahy, TyphonRT, Inc.
+
+typhon-core-gulptasks may be freely distributed under the MIT license.
