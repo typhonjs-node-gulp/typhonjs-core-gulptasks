@@ -37,10 +37,10 @@ module.exports = function (gulp, options)
     *       "minify": false,                 // Minify mangle property used by SystemJS Builder.
     *       "src": "src/ModuleRuntime.js",   // Entry source point for SystemJS Builder
     *       "extraConfig":                   // Defines additional JSPM config parameters to load after ./config.json is
-    *       {                                // loaded. This example skips building `jquery` and `underscore`.
-    *          "meta":
-    *          {
-    *             "jquery": { "build": false },
+    *       {                                // loaded. Provide a string and it will be interpreted as an additional
+    *          "meta":                       // configuration file styled like `config.js` or provide an object hash
+    *          {                             // which is loaded directly.  This example skips building `jquery` and
+    *             "jquery": { "build": false },    // `underscore`.
     *             "underscore": { "build": false }
     *          }
     *       }
@@ -172,10 +172,20 @@ function buildStatic(jspm, srcFilename, destDir, destFilepath, minify, mangle, f
          reject();
       }
 
-      var builder = new jspm.Builder();
-      builder.loadConfig('./config.js').then(function()
+      var additionalConfig = './config.js';
+
+      // Default to loading './config.js' twice unless extraConfig defines a string / file path to load.
+      if (typeof extraConfig === 'string')
       {
-         if (typeof extraConfig !== 'undefined')
+         additionalConfig = extraConfig;
+      }
+
+      var builder = new jspm.Builder('./config.js');
+
+      builder.loadConfig(additionalConfig).then(function()
+      {
+         // If extraConfig is an object literal / hash then load it now.
+         if (typeof extraConfig === 'object')
          {
             builder.config(extraConfig);
          }
