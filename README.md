@@ -61,7 +61,7 @@ The following is an example entry:
     "formats": ["amd", "cjs"],       // Module format to use / also defines destination sub-directory.
     "mangle": false,                 // Uglify mangle property used by SystemJS Builder.
     "minify": false,                 // Minify mangle property used by SystemJS Builder.
-    "src": "src/ModuleRuntime.js",   // Entry source point for SystemJS Builder
+    "src": "<dir>/<filename>.js",    // Entry source point for SystemJS Builder
     "extraConfig":                   // Defines additional JSPM config parameters to load after ./config.json is
     {                                // loaded. This example skips building `jquery` and `underscore`.
       "meta":
