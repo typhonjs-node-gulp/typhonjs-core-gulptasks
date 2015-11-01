@@ -61,22 +61,24 @@ The following is an example entry:
 ```
 [
   {
-    "destBaseDir": "./dist",         // Root destination directory for bundle output.
-    "destFilename": "<filename>.js", // Destination bundle file name.
-    "formats": ["amd", "cjs"],       // Module format to use / also defines destination sub-directory.
-    "mangle": false,                 // Uglify mangle property used by SystemJS Builder.
-    "minify": false,                 // Minify mangle property used by SystemJS Builder.
-    "src": "<dir>/<filename>.js",    // Entry source point for SystemJS Builder
-    "extraConfig":                   // Defines additional JSPM config parameters to load after ./config.json is
-    {                                // loaded. This example skips building `jquery` and `underscore`.
-      "meta":
-      {
-        "jquery": { "build": false },
+    "destBaseDir": "./dist",            // Root destination directory for bundle output.
+    "destFilename": "<filename>.js",    // Destination bundle file name.
+    "formats": ["amd", "cjs"],          // Module format to use / also defines destination sub-directory.
+    "mangle": false,                    // Uglify mangle property used by SystemJS Builder.
+    "minify": false,                    // Minify mangle property used by SystemJS Builder.
+    "src": "<dir>/<filename>.js",       // Entry source point for SystemJS Builder
+    "extraConfig":                      // Defines additional JSPM config parameters to load after ./config.json is
+    {                                   // loaded. Provide a string and it will be interpreted as an additional
+      "meta":                           // configuration file styled like `config.js` or provide an object hash
+      {                                 // which is loaded directly.  This example skips building `jquery` and    
+        "jquery": { "build": false },   // `underscore`.
         "underscore": { "build": false }
       }
     }
   }
 ]
 ```
+
+Please note that `extraConfig` can be a string / file path relative to the project root path that defines an additional JSPM styled configuration file like `config.js` (wrapped in a System.config({ ... }); statement). This is particularly useful to define additional user supplied mapped paths that incorporate normalized JSPM package paths resolved from `config.js`. If an object literal / hash is supplied it is loaded directly.
 
 For a comprehensive demo and tutorial see the [Backbone-Parse-ES6-Demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhon-core-gulptasks`.
