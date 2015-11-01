@@ -1,0 +1,18 @@
+
+Main Tasks
+------------------------------
+    esdoc
+    eslint
+    test
+
+Sub Tasks
+------------------------------
+    git-push
+    jspm-bundle
+    jspm-inspect
+    jspm-install
+    local-test
+    npm-install
+    npm-uninstall
+    verify-test
+

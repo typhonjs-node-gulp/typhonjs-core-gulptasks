@@ -1,0 +1,46 @@
+{
+   "name": "typhon-core-gulptasks",
+   "version": "0.0.1",
+   "homepage": "https://github.com/typhonjs/typhon-core-gulptasks/",
+   "description": "Provides common gulp tasks shared by TyphonJS.",
+   "license": "MIT",
+   "author": {
+      "name": "Mike Leahy"
+   },
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/typhonjs/typhon-core-gulptasks/typhon-core-gulptasks.git"
+   },
+   "maintainers": [
+      {
+         "name": "Mike Leahy",
+         "email": "support@js.typhonrt.org"
+      }
+   ],
+   "dependencies": {
+      "jspm": "^0.16.14",
+      "bluebird": "^3.0.3",
+      "esdoc-plugin-jspm": "^0.1.0",
+      "gulp-esdoc": "^0.1.0",
+      "gulp-eslint": "^1.0.0",
+      "yargs": "^3.27.0"
+   },
+   "devDependencies": {
+      "gulp-task-listing": "^1.0.1"
+   },
+   "main": "index.js",
+   "scripts": {
+   },
+   "keywords": [
+      "TyphonJS",
+      "Gulp",
+      "common tasks"
+   ],
+   "files": [
+      "tasks"
+   ],
+   "directories": {},
+   "bugs": {
+      "url": "https://github.com/typhonjs/typhon-core-gulptasks/issues"
+   }
+}
