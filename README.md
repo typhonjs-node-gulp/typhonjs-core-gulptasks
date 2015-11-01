@@ -10,11 +10,13 @@
 Provides common shared [Gulp](http://gulpjs.com/) tasks for [TyphonJS](https://github.com/typhonjs) and beyond for those using [JSPM](http://jspm.io) / [SystemJS](https://github.com/systemjs/systemjs). By packaging all common Gulp tasks as a NPM package this fascilitates sharing the tasks across several projects / repos and having one authoritative and versioned source for the tasks.
 
 The following tasks are available and defined in `typhon-core-gulptasks`:
-- [esdocs](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation including `esdoc-plugin-jspm` support and outputs to the location specified by `esdoc.json`.
+- [esdocs](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) support and outputs to the location specified by `esdoc.json`.
 - [eslint](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/eslint.js) - Runs ESLint using `.eslintrc` outputting to console and failing on any errors. 
-- [jspm-bundle](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Creates one or more bundles defined in `./bundle-config.js` or ` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
-- [jspm-inspect](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm inspect`
-- [jspm-install](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm install`
-- [npm-install](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm install`
-- [npm-uninstall](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm uninstall`
+- [git-push-clear-config](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success clears JSPM `config.js` of `map` & `paths` entries. 
+- [git-push](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success executes `git push`. 
+- [jspm-bundle](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Creates one or more bundles defined in `./bundle-config.js` or `./bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+- [jspm-inspect](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm inspect`.
+- [jspm-install](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm install`.
+- [npm-install](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm install`.
+- [npm-uninstall](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm uninstall`.
 - [test-basic](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/test.js) - Runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
