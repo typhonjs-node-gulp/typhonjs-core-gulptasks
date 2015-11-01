@@ -1,9 +1,15 @@
-module.exports = function (gulp, options)
+/**
+ * Provides Gulp tasks for testing.
+ *
+ * The following tasks are defined:
+ * `test-basic` - Runs `eslint` and `jspm-bundle`; useful for basic testing and Travis CI.
+ *
+ * @param {Gulp}  gulp  - An instance of Gulp.
+ */
+module.exports = function(gulp)
 {
-   var rootPath = options.rootPath;
-
    /**
-    * Runs "lint" and "bundle"; useful for testing and Travis CI.
+    * Runs `eslint` and `jspm-bundle`; useful for basic testing and Travis CI.
     */
-   gulp.task('test', ['eslint', 'jspm-bundle']);
+   gulp.task('test-basic', ['eslint', 'jspm-bundle']);
 };

@@ -1,8 +1,8 @@
 /**
- * Gulp operations
+ * Gulp operations - Used for Travis CI / testing
  *
  * The following tasks are available and defined in `typhon-core-gulptasks`:
- * esdocs - Creates documentation and outputs it in './docs'
+ * esdocs - Creates ES6 documentation including `esdoc-plugin-jspm` support and outputs it in './docs'
  * eslint - Runs ESLint outputting to console.
  * jspm-bundle - Creates one or more bundles defined in './bundle-config.js' (Add "--travis" argument to run minimal
  *               bundle op for Travis CI.)

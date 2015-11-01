@@ -3,16 +3,18 @@ Main Tasks
 ------------------------------
     esdoc
     eslint
-    test
 
 Sub Tasks
 ------------------------------
     git-push
+    git-push-clear-config
     jspm-bundle
     jspm-inspect
     jspm-install
     local-test
     npm-install
+    npm-outdated
     npm-uninstall
+    test-basic
     verify-test
 
