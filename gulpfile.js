@@ -1,19 +1,7 @@
 /**
  * Gulp operations - Used for Travis CI / testing
- *
- * The following tasks are available and defined in `typhon-core-gulptasks`:
- * esdocs - Creates ES6 documentation including `esdoc-plugin-jspm` support and outputs it in './docs'
- * eslint - Runs ESLint outputting to console.
- * jspm-bundle - Creates one or more bundles defined in './bundle-config.js' (Add "--travis" argument to run minimal
- *               bundle op for Travis CI.)
- * jspm-inspect - Executes 'jspm inspect'
- * jspm-install - Executes 'jspm install'
- * npm-install - Executes 'npm install'
- * npm-uninstall - Executes 'npm uninstall'
- * test - Runs eslint and jspm-bundle tasks.  (Add "--travis" argument to run minimal bundle op for Travis CI.)
+ * Please see https://www.npmjs.com/package/typhonjs-core-gulptasks
  */
-
-/* eslint-disable */
 
 var gulp = require('gulp');
 
