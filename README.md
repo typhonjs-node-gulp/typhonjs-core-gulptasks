@@ -1,4 +1,4 @@
-![Typhon-Core-Gulptasks](http://i.imgur.com/oWpvbAs.png)
+![Typhon-Core-Gulptasks](http://i.imgur.com/KqIyNtd.png)
 
 [![NPM](https://img.shields.io/npm/v/typhon-core-gulptasks.svg?label=npm)](https://www.npmjs.com/package/typhon-core-gulptasks)
 [![Build Status](https://travis-ci.org/typhonjs/typhon-core-gulptasks.svg?branch=master)](https://travis-ci.org/typhonjs/typhon-core-gulptasks)
