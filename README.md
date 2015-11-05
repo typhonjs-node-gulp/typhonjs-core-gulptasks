@@ -1,8 +1,8 @@
 ![Typhon-Core-Gulptasks](http://i.imgur.com/KqIyNtd.png)
 
-[![NPM](https://img.shields.io/npm/v/typhon-core-gulptasks.svg?label=npm)](https://www.npmjs.com/package/typhon-core-gulptasks)
-[![Build Status](https://travis-ci.org/typhonjs/typhon-core-gulptasks.svg?branch=master)](https://travis-ci.org/typhonjs/typhon-core-gulptasks)
-[![Dependency Status](https://www.versioneye.com/user/projects/5636036136d0ab00160020a8/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5636036136d0ab00160020a8)
+[![NPM](https://img.shields.io/npm/v/typhonjs-core-gulptasks.svg?label=npm)](https://www.npmjs.com/package/typhonjs-core-gulptasks)
+[![Build Status](https://travis-ci.org/typhonjs/typhonjs-core-gulptasks.svg?branch=0.1.0)](https://travis-ci.org/typhonjs/typhonjs-core-gulptasks)
+[![Dependency Status](https://www.versioneye.com/user/projects/563b3b1c1d47d40015000a91/badge.svg?style=flat)](https://www.versioneye.com/user/projects/563b3b1c1d47d40015000a91)
 
 [![Code Style](https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
 [![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat)](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/LICENSE)
