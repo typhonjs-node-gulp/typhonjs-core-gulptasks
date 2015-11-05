@@ -64,6 +64,7 @@ The following is an example entry:
   "entryPoints":
   [
     {
+      "inMemoryBuild": false              // Boolean to indicate in memory build; may omit `dest<X>` entries.
       "destBaseDir": "./dist",            // Root destination directory for bundle output.
       "destFilename": "<filename>.js",    // Destination bundle file name.
       "formats": ["amd", "cjs"],          // Module format to use / also defines destination sub-directory.
