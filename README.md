@@ -5,25 +5,25 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/563b3b1c1d47d40015000a91/badge.svg?style=flat)](https://www.versioneye.com/user/projects/563b3b1c1d47d40015000a91)
 
 [![Code Style](https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
-[![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat)](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat)](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/LICENSE)
 
 Provides common shared [Gulp](http://gulpjs.com/) tasks for [TyphonJS](https://github.com/typhonjs) and beyond for those using [JSPM](http://jspm.io) / [SystemJS](https://github.com/systemjs/systemjs). By packaging all common Gulp tasks as a NPM package this fascilitates sharing the tasks across several projects / repos and having one authoritative and versioned source for these tasks and all dependencies. Various JSPM & NPM CLI functions are wrapped as tasks allowing execution from IDEs which support Gulp. 
 
-The following tasks are available and defined in `typhon-core-gulptasks`:
-- [esdocs](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) support and outputs to the location specified by `esdoc.json`.
-- [eslint](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/eslint.js) - Runs [ESLint](http://eslint.org/) using `.eslintrc` outputting to console and failing on any errors.
-- [git-push](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success executes `git push`. 
-- [jspm-bundle](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
-- [jspm-clear-config](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`. Performs a git commit if `config.js` was modified.
-- [jspm-clear-config-git-push](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Verifies the build by running `test-basic` and on success runs `jspm-clear-config` then `git-push` tasks. 
-- [jspm-inspect](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm inspect` via JSPM CLI.
-- [jspm-install](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm install` via JSPM CLI.
-- [npm-install](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm install` via NPM CLI.
-- [npm-outdated](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm outdated` via NPM CLI.
-- [npm-uninstall](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm uninstall` via NPM CLI.
-- [test-basic](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/test.js) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+The following tasks are available and defined in `typhonjs-core-gulptasks`:
+- [esdocs](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) support and outputs to the location specified by `esdoc.json`.
+- [eslint](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/eslint.js) - Runs [ESLint](http://eslint.org/) using `.eslintrc` outputting to console and failing on any errors.
+- [git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success executes `git push`. 
+- [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+- [jspm-clear-config](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js) - Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`. Performs a git commit if `config.js` was modified.
+- [jspm-clear-config-git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js) - Verifies the build by running `test-basic` and on success runs `jspm-clear-config` then `git-push` tasks. 
+- [jspm-inspect](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm inspect` via JSPM CLI.
+- [jspm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm install` via JSPM CLI.
+- [npm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm install` via NPM CLI.
+- [npm-outdated](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm outdated` via NPM CLI.
+- [npm-uninstall](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm uninstall` via NPM CLI.
+- [test-basic](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/test.js) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
 
-Importing and using `typhon-core-gulptasks` is easy and streamlined. 
+Importing and using `typhonjs-core-gulptasks` is easy and streamlined. 
 
 First include it as an entry in `devDependencies` in `package.json`:
 ```
@@ -42,7 +42,7 @@ Then create a minimal `gulpfile.js`:
 ```
 var gulp = require('gulp');
 
-// Require all `typhon-core-gulptasks`
+// Require all `typhonjs-core-gulptasks`
 require('typhonjs-core-gulptasks')(gulp, { rootPath: __dirname, srcGlob: './src/**/*.js' });
 ```
 
@@ -87,6 +87,6 @@ Please note that `extraConfig` can be a string / file path relative to the proje
 
 For a comprehensive demo and tutorial see the [backbone-parse-es6-demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhonjs-core-gulptasks`.
 
-typhon-core-gulptasks (c) 2015-present Michael Leahy, TyphonRT, Inc.
+typhonjs-core-gulptasks (c) 2015-present Michael Leahy, TyphonRT, Inc.
 
-typhon-core-gulptasks may be freely distributed under the MIT license.
+typhonjs-core-gulptasks may be freely distributed under the MIT license.
