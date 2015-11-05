@@ -1,7 +1,7 @@
 {
    "name": "typhonjs-core-gulptasks",
    "version": "0.1.0",
-   "homepage": "https://github.com/typhonjs/typhon-core-gulptasks/",
+   "homepage": "https://github.com/typhonjs/typhonjs-core-gulptasks/",
    "description": "Provides common gulp tasks shared by TyphonJS and beyond for JSPM / SystemJS projects.",
    "license": "MIT",
    "author": {
