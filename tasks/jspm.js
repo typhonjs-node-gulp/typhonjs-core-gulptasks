@@ -5,6 +5,12 @@
  * `jspm-bundle` - Bundles the project via the config file found in `./config/bundle-config.json` or
  * `./config/bundle-config-travis.json` if `--travis` is supplied as an argument to Gulp.
  *
+ * `jspm-clear-config` - Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`.
+ * Performs a git commit if `config.js` was modified.
+ *
+ * `jspm-clear-config-git-push` - Runs `test-basic` then runs in sequence the following tasks: `jspm-clear-config` and
+ * `git-push`
+ *
  * `jspm-inspect` - Runs `jspm inspect` via JSPM CLI.
  *
  * `jspm-install` - Runs `jspm install` via JSPM CLI.
@@ -58,13 +64,14 @@ module.exports = function (gulp, options)
       var promiseList = [];
 
       // When testing the build in Travis CI we only need to run a single bundle operation.
-      var bundleInfo = argv.travis ? require(rootPath +path.sep +'config' +path.sep +'bundle-config-travis.json') :
-       require(rootPath +path.sep +'config' +path.sep +'bundle-config.json');
+      var bundleInfo = argv.travis || process.env.TRAVIS ? require(rootPath +path.sep +'config' +path.sep
+       +'bundle-config-travis.json') : require(rootPath +path.sep +'config' +path.sep +'bundle-config.json');
 
       for (var cntr = 0; cntr < bundleInfo.entryPoints.length; cntr++)
       {
          var entry = bundleInfo.entryPoints[cntr];
 
+         var inMemoryBuild = entry.inMemoryBuild || false;
          var destBaseDir = entry.destBaseDir;
          var destFilename = entry.destFilename;
          var srcFilename = entry.src;
@@ -73,34 +80,40 @@ module.exports = function (gulp, options)
          var mangle = entry.mangle;
          var minify = entry.minify;
 
-         // Remove an leading local directory string
-         destBaseDir = destBaseDir.replace(new RegExp('^\.' +(path.sep === '\\' ? '\\' +path.sep : path.sep)), '');
-
-         // Complete full path including root path of the project.
-         destBaseDir = rootPath +path.sep +destBaseDir;
-
-         // Attempt to create destBaseDir directory if it does not exist.
-         if (!fs.existsSync(destBaseDir))
+         if (!inMemoryBuild)
          {
-            fs.mkdirSync(destBaseDir);
-         }
+            // Remove an leading local directory string
+            destBaseDir = destBaseDir.replace(new RegExp('^\.' +(path.sep === '\\' ? '\\' +path.sep : path.sep)), '');
 
-         // Error out early if destBaseDir does not exist.
-         if (!fs.existsSync(destBaseDir))
-         {
-            console.error('Could not create destination directory: ' +destBaseDir);
-            process.exit(1);
+            // Complete full path including root path of the project.
+            destBaseDir = rootPath +path.sep +destBaseDir;
+
+            // Attempt to create destBaseDir directory if it does not exist.
+            if (!fs.existsSync(destBaseDir))
+            {
+               fs.mkdirSync(destBaseDir);
+            }
+
+            // Error out early if destBaseDir does not exist.
+            if (!fs.existsSync(destBaseDir))
+            {
+               console.error('Could not create destination directory: ' +destBaseDir);
+               process.exit(1);
+            }
          }
 
          for (var cntr2 = 0; cntr2 < formats.length; cntr2++)
          {
             var format = formats[cntr2];
 
-            var destDir = destBaseDir +path.sep +format;
-            var destFilepath = destDir +path.sep +destFilename;
+            if (!inMemoryBuild)
+            {
+               var destDir = destBaseDir + path.sep + format;
+               var destFilepath = destDir + path.sep + destFilename;
+            }
 
-            promiseList.push(buildStatic(jspm, srcFilename, destDir, destFilepath, minify, mangle, format,
-             extraConfig));
+            promiseList.push(buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, minify, mangle,
+             format, extraConfig));
          }
       }
 
@@ -113,6 +126,76 @@ module.exports = function (gulp, options)
          console.log('Bundle error: ' +err);
          process.exit(1);
       });
+   });
+
+   /**
+    * Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`. If `config.js` is
+    * modified a git commit for `config.js` is performed.
+    *
+    * Note: Make sure to pass in `--travis` as an argument to Gulp to run an in memory bundle / test.
+    */
+   gulp.task('jspm-clear-config', function(cb)
+   {
+      var exec = require('child_process').exec;
+      var fs = require('fs');
+      var path = require('path');
+      var vm = require('vm');
+
+      // The location of the JSPM `config.js` configuration file.
+      var jspmConfigPath = rootPath +path.sep +'config.js';
+
+      if (!fs.existsSync(jspmConfigPath))
+      {
+         console.error('Could not locate JSPM `config.js` at: ' +jspmConfigPath);
+         process.exit(1);
+      }
+
+      var buffer = fs.readFileSync(jspmConfigPath, 'utf8');
+
+      // Remove the leading and trailing Javascript SystemJS config method invocation so we are left with a JSON file.
+      buffer = buffer.replace('System.config(', '');
+      buffer = buffer.replace(');', '');
+
+      // Load buffer as object.
+      var config = vm.runInThisContext('object = ' +buffer);
+
+      // Only modify config.js if map and paths is not empty.
+      if (Object.keys(config.map).length > 0 || Object.keys(config.paths).length > 0)
+      {
+         // Remove map and paths.
+         config.map = {};
+         config.paths = {};
+
+         // Rewrite the config.js buffer.
+         buffer = 'System.config(' + JSON.stringify(config, null, 2) +');';
+
+         // Remove quotes around primary keys ignoring babelOptions / `optional`.
+         buffer = buffer.replace(/"([a-zA-Z]+)":/g, function(match, p1)
+         {
+            return p1 !== 'optional' ? p1 +':' : match;
+         });
+
+         // Rewrite 'config.js'.
+         fs.writeFileSync(jspmConfigPath, buffer);
+
+         // Execute git commit.
+         exec("git commit -m 'Removed extra config.js data' config.js", { cwd: rootPath }, function(err, stdout, stderr)
+         {
+            console.log(stdout);
+            console.log(stderr);
+            cb(err);
+         });
+      }
+   });
+
+   /**
+    * Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`. If `config.js` is
+    * modified a git commit for `config.js` is performed. A git push is then executed.
+    */
+   gulp.task('jspm-clear-config-git-push', ['test-basic'], function(cb)
+   {
+      var runSequence = require('run-sequence').use(gulp);
+      runSequence('jspm-clear-config', 'git-push', cb);
    });
 
    /**
@@ -148,6 +231,7 @@ module.exports = function (gulp, options)
  * Returns a Promise which encapsulates an execution of SystemJS Builder.
  *
  * @param {jspm}     jspm           - An instance of JSPM.
+ * @param {boolean}  inMemoryBuild  - Designates that an in memory build should be performed.
  * @param {string}   srcFilename    - Source entry point for SystemJS Builder.
  * @param {string}   destDir        - Destination directory for bundle.
  * @param {string}   destFilepath   - Destination file path for bundle.
@@ -157,76 +241,94 @@ module.exports = function (gulp, options)
  * @param {object}   extraConfig    - Optional JSPM config to load after `config.js`.
  * @returns {bluebird} Promise
  */
-function buildStatic(jspm, srcFilename, destDir, destFilepath, minify, mangle, format, extraConfig)
+function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, minify, mangle, format, extraConfig)
 {
    return new Promise(function(resolve, reject)
    {
-      if (!fs.existsSync(destDir))
+      if (!inMemoryBuild)
       {
-         fs.mkdirSync(destDir);
-      }
+         if (!fs.existsSync(destDir))
+         {
+            fs.mkdirSync(destDir);
+         }
 
-      if (!fs.existsSync(destDir))
-      {
-         console.error('Could not create destination directory: ' +destDir);
-         reject();
-      }
-
-      var additionalConfig = './config.js';
-
-      // Default to loading './config.js' twice unless extraConfig defines a string / file path to load.
-      if (typeof extraConfig === 'string')
-      {
-         additionalConfig = extraConfig;
+         if (!fs.existsSync(destDir))
+         {
+            console.error('Could not create destination directory: ' +destDir);
+            reject();
+         }
       }
 
       var builder = new jspm.Builder('./config.js');
 
-      builder.loadConfig(additionalConfig).then(function()
+      var extraConfigType = typeof extraConfig;
+      if (extraConfigType === 'string')
       {
-         // If extraConfig is an object literal / hash then load it now.
-         if (typeof extraConfig === 'object')
-         {
-            builder.config(extraConfig);
-         }
+         builder.loadConfigSync(extraConfig)
+      }
+      else if (extraConfigType === 'object')
+      {
+         builder.config(extraConfig);
+      }
 
+      if (inMemoryBuild)
+      {
+         console.log('Bundle queued - srcFilename: ' +srcFilename +'; format: ' +format  +'; mangle: ' +mangle
+          +'; minify: ' +minify);
+      }
+      else
+      {
          console.log('Bundle queued - srcFilename: ' +srcFilename +'; format: ' +format  +'; mangle: ' +mangle
           +'; minify: ' +minify +'; destDir: ' +destDir +'; destFilepath: ' +destFilepath);
+      }
 
-         var builderPromise;
-         var builderConfig =
-         {
-            minify: minify,
-            mangle: mangle,
-            format: format
-         };
+      var builderPromise;
+      var builderConfig =
+      {
+         minify: minify,
+         mangle: mangle,
+         format: format
+      };
 
-         // When testing we only need to do an in memory build.
-         if (argv.travis)
+      // When testing we only need to do an in memory build.
+      if (inMemoryBuild || argv.travis || process.env.TRAVIS)
+      {
+         builderPromise = builder.buildStatic(srcFilename, builderConfig);
+      }
+      else
+      {
+         builderPromise = builder.buildStatic(srcFilename, destFilepath, builderConfig);
+      }
+
+      builderPromise.then(function ()
+      {
+         if (inMemoryBuild)
          {
-            builderPromise = builder.buildStatic(srcFilename, builderConfig);
+            console.log('Bundle complete - minify: ' +minify +'; mangle: ' +mangle +'; format: ' +format);
          }
          else
          {
-            builderPromise = builder.buildStatic(srcFilename, destFilepath, builderConfig);
-         }
-
-         builderPromise.then(function ()
-         {
             console.log('Bundle complete - filename: ' +destFilepath +' minify: ' +minify +'; mangle: ' +mangle
              +'; format: ' +format);
+         }
 
-            resolve();
-         })
-          .catch(function(err)
-          {
-             console.log('Bundle error - filename: ' +destFilepath +' minify: ' +minify + '; mangle: ' +mangle
-              +'; format: ' +format);
+         resolve();
+      })
+      .catch(function(err)
+      {
+         if (inMemoryBuild)
+         {
+            console.log('Bundle error - minify: ' +minify + '; mangle: ' +mangle +'; format: ' +format);
+         }
+         else
+         {
+            console.log('Bundle error - filename: ' +destFilepath +' minify: ' +minify + '; mangle: ' +mangle
+             +'; format: ' +format);
+         }
 
-             console.log(err);
+         console.log(err);
 
-             reject(err);
-          });
+         reject(err);
       });
    });
 }

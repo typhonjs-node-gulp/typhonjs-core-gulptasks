@@ -7,8 +7,9 @@ Main Tasks
 Sub Tasks
 ------------------------------
     git-push
-    git-push-clear-config
     jspm-bundle
+    jspm-clear-config
+    jspm-clear-config-git-push
     jspm-inspect
     jspm-install
     local-test

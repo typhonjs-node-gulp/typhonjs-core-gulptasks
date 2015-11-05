@@ -33,17 +33,9 @@ module.exports = function (gulp, options)
          process.exit(1);
       }
 
-      var eslintConfig = fs.readFileSync(eslintConfigPath, 'utf8');
-
-      // Remove all comments formatted between /* ... */
-      eslintConfig = eslintConfig.replace(/\/\*([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*\*+\//g, '');
-
-      // Parse the eslint config as JSON.
-      eslintConfig = JSON.parse(eslintConfig);
-
       // Run ESLint
       return gulp.src(srcGlob)
-       .pipe(eslint(eslintConfig))
+       .pipe(eslint(eslintConfigPath))
        .pipe(eslint.formatEach('compact', process.stderr))
        .pipe(eslint.failOnError());
    });
