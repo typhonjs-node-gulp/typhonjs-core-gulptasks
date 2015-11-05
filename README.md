@@ -1,4 +1,4 @@
-![Typhon-Core-Gulptasks](http://i.imgur.com/KqIyNtd.png)
+![typhonjs-core-gulptasks](http://i.imgur.com/KqIyNtd.png)
 
 [![NPM](https://img.shields.io/npm/v/typhonjs-core-gulptasks.svg?label=npm)](https://www.npmjs.com/package/typhonjs-core-gulptasks)
 [![Build Status](https://travis-ci.org/typhonjs/typhonjs-core-gulptasks.svg?branch=0.1.0)](https://travis-ci.org/typhonjs/typhonjs-core-gulptasks)
@@ -11,16 +11,17 @@ Provides common shared [Gulp](http://gulpjs.com/) tasks for [TyphonJS](https://g
 
 The following tasks are available and defined in `typhon-core-gulptasks`:
 - [esdocs](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) support and outputs to the location specified by `esdoc.json`.
-- [eslint](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/eslint.js) - Runs [ESLint](http://eslint.org/) using `.eslintrc` outputting to console and failing on any errors. Please note that comments are stripped as `.eslintrc` is converted to pure JSON and only comments between `/* ... */` are supported.
-- [git-push-clear-config](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success clears JSPM `config.js` of `map` & `paths` entries performing a `git commit` as necessary before executing `git push`. 
+- [eslint](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/eslint.js) - Runs [ESLint](http://eslint.org/) using `.eslintrc` outputting to console and failing on any errors.
 - [git-push](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success executes `git push`. 
 - [jspm-bundle](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+- [jspm-clear-config](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`. Performs a git commit if `config.js` was modified.
+- [jspm-clear-config-git-push](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Verifies the build by running `test-basic` and on success runs `jspm-clear-config` then `git-push` tasks. 
 - [jspm-inspect](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm inspect` via JSPM CLI.
 - [jspm-install](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/jspm.js) - Executes `jspm install` via JSPM CLI.
 - [npm-install](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm install` via NPM CLI.
 - [npm-outdated](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm outdated` via NPM CLI.
 - [npm-uninstall](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm uninstall` via NPM CLI.
-- [test-basic](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/test.js) - Runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+- [test-basic](https://github.com/typhonjs/typhon-core-gulptasks/blob/master/tasks/test.js) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
 
 Importing and using `typhon-core-gulptasks` is easy and streamlined. 
 
@@ -32,7 +33,7 @@ First include it as an entry in `devDependencies` in `package.json`:
   "devDependencies": {
     "gulp": "^3.9.0",
     "jspm": "^0.16.14",
-    "typhon-core-gulptasks": "^0.1.0"
+    "typhonjs-core-gulptasks": "^0.1.0"
   }
 }
 ```
@@ -42,7 +43,7 @@ Then create a minimal `gulpfile.js`:
 var gulp = require('gulp');
 
 // Require all `typhon-core-gulptasks`
-require('typhon-core-gulptasks')(gulp, { rootPath: __dirname, srcGlob: './src/**/*.js' });
+require('typhonjs-core-gulptasks')(gulp, { rootPath: __dirname, srcGlob: './src/**/*.js' });
 ```
 
 - `rootPath` defines the base path where JSPM `config.js` is located.
@@ -50,7 +51,7 @@ require('typhon-core-gulptasks')(gulp, { rootPath: __dirname, srcGlob: './src/**
 
 The `esdoc` task requires a valid [esdoc.json](https://esdoc.org/config.html) file in the root project path.
 
-The `eslint` task requires a valid [.eslintrc](http://eslint.org/docs/user-guide/configuring.html) file in the root project path. Please note that comments are stripped as `.eslintrc` is converted to pure JSON and only comments between `/* ... */` are supported.
+The `eslint` task requires a valid [.eslintrc](http://eslint.org/docs/user-guide/configuring.html) file in the root project path. 
 
 The `jspm-bundle` task requires two configuration files to be defined in `./config`:
 - `./config/bundle-config.js` - Provides the main bundle configuration.
@@ -59,29 +60,32 @@ The `jspm-bundle` task requires two configuration files to be defined in `./conf
 
 The following is an example entry:
 ```
-[
-  {
-    "destBaseDir": "./dist",            // Root destination directory for bundle output.
-    "destFilename": "<filename>.js",    // Destination bundle file name.
-    "formats": ["amd", "cjs"],          // Module format to use / also defines destination sub-directory.
-    "mangle": false,                    // Uglify mangle property used by SystemJS Builder.
-    "minify": false,                    // Minify mangle property used by SystemJS Builder.
-    "src": "<dir>/<filename>.js",       // Entry source point for SystemJS Builder
-    "extraConfig":                      // Defines additional JSPM config parameters to load after ./config.json is
-    {                                   // loaded. Provide a string and it will be interpreted as an additional
-      "meta":                           // configuration file styled like `config.js` or provide an object hash
-      {                                 // which is loaded directly.  This example skips building `jquery` and    
-        "jquery": { "build": false },   // `underscore`.
-        "underscore": { "build": false }
+{
+  "entryPoints":
+  [
+    {
+      "destBaseDir": "./dist",            // Root destination directory for bundle output.
+      "destFilename": "<filename>.js",    // Destination bundle file name.
+      "formats": ["amd", "cjs"],          // Module format to use / also defines destination sub-directory.
+      "mangle": false,                    // Uglify mangle property used by SystemJS Builder.
+      "minify": false,                    // Minify property used by SystemJS Builder.
+      "src": "<dir>/<filename>.js",       // Entry source point for SystemJS Builder
+      "extraConfig":                      // Defines additional JSPM config parameters to load after ./config.json is
+      {                                   // loaded. Provide a string and it will be interpreted as an additional
+        "meta":                           // configuration file styled like `config.js` or provide an object hash
+        {                                 // which is loaded directly.  This example skips building `jquery` and    
+          "jquery": { "build": false },   // `underscore`.
+          "underscore": { "build": false }
+        }
       }
     }
-  }
-]
+  ]
+}
 ```
 
 Please note that `extraConfig` can be a string / file path relative to the project root path that defines an additional JSPM styled configuration file like `config.js` (wrapped in a `System.config({ ... });` statement). This is particularly useful to define additional user supplied mapped paths that incorporate normalized JSPM package paths resolved from `config.js`. If an object literal / hash is supplied it is loaded directly.
 
-For a comprehensive demo and tutorial see the [backbone-parse-es6-demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhon-core-gulptasks`.
+For a comprehensive demo and tutorial see the [backbone-parse-es6-demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhonjs-core-gulptasks`.
 
 typhon-core-gulptasks (c) 2015-present Michael Leahy, TyphonRT, Inc.
 
