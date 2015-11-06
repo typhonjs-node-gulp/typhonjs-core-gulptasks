@@ -4,5 +4,6 @@ node_js:
 before_script:
   - npm install -g gulp
 script:
+  - gulp eslint
   - gulp local-test --silent > './test/testdata.txt'
   - gulp verify-test

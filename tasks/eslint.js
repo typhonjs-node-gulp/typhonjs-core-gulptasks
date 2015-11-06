@@ -7,7 +7,7 @@
  * @param {Gulp}     gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
-module.exports = function (gulp, options)
+module.exports = function(gulp, options)
 {
    // The root path of the project being operated on via all tasks.
    var rootPath = options.rootPath;
@@ -25,11 +25,11 @@ module.exports = function (gulp, options)
       var path = require('path');
 
       // The location of the `.eslintrc` configuration file.
-      var eslintConfigPath = rootPath +path.sep +'.eslintrc';
+      var eslintConfigPath = rootPath + path.sep + '.eslintrc';
 
       if (!fs.existsSync(eslintConfigPath))
       {
-         console.error('Could not locate `.eslintrc` at: ' +eslintConfigPath);
+         console.error('Could not locate `.eslintrc` at: ' + eslintConfigPath);
          process.exit(1);
       }
 

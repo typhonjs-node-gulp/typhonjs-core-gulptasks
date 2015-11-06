@@ -23,7 +23,7 @@ var fs =       require('fs');
 
 var Promise =  require("bluebird");
 
-module.exports = function (gulp, options)
+module.exports = function(gulp, options)
 {
    // The root path of the project being operated on via all tasks.
    var rootPath = options.rootPath;
@@ -64,8 +64,8 @@ module.exports = function (gulp, options)
       var promiseList = [];
 
       // When testing the build in Travis CI we only need to run a single bundle operation.
-      var bundleInfo = argv.travis || process.env.TRAVIS ? require(rootPath +path.sep +'config' +path.sep
-       +'bundle-config-travis.json') : require(rootPath +path.sep +'config' +path.sep +'bundle-config.json');
+      var bundleInfo = argv.travis || process.env.TRAVIS ? require(rootPath + path.sep + 'config' + path.sep
+       + 'bundle-config-travis.json') : require(rootPath + path.sep + 'config' + path.sep + 'bundle-config.json');
 
       for (var cntr = 0; cntr < bundleInfo.entryPoints.length; cntr++)
       {
@@ -83,10 +83,10 @@ module.exports = function (gulp, options)
          if (!inMemoryBuild)
          {
             // Remove an leading local directory string
-            destBaseDir = destBaseDir.replace(new RegExp('^\.' +(path.sep === '\\' ? '\\' +path.sep : path.sep)), '');
+            destBaseDir = destBaseDir.replace(new RegExp('^\.' + (path.sep === '\\' ? '\\' + path.sep : path.sep)), '');
 
             // Complete full path including root path of the project.
-            destBaseDir = rootPath +path.sep +destBaseDir;
+            destBaseDir = rootPath + path.sep + destBaseDir;
 
             // Attempt to create destBaseDir directory if it does not exist.
             if (!fs.existsSync(destBaseDir))
@@ -97,7 +97,7 @@ module.exports = function (gulp, options)
             // Error out early if destBaseDir does not exist.
             if (!fs.existsSync(destBaseDir))
             {
-               console.error('Could not create destination directory: ' +destBaseDir);
+               console.error('Could not create destination directory: ' + destBaseDir);
                process.exit(1);
             }
          }
@@ -121,9 +121,9 @@ module.exports = function (gulp, options)
       {
          console.log('All Bundle Tasks Complete');
       })
-      .catch(function (err)
+      .catch(function(err)
       {
-         console.log('Bundle error: ' +err);
+         console.log('Bundle error: ' + err);
          process.exit(1);
       });
    });
@@ -142,11 +142,11 @@ module.exports = function (gulp, options)
       var vm = require('vm');
 
       // The location of the JSPM `config.js` configuration file.
-      var jspmConfigPath = rootPath +path.sep +'config.js';
+      var jspmConfigPath = rootPath + path.sep + 'config.js';
 
       if (!fs.existsSync(jspmConfigPath))
       {
-         console.error('Could not locate JSPM `config.js` at: ' +jspmConfigPath);
+         console.error('Could not locate JSPM `config.js` at: ' + jspmConfigPath);
          process.exit(1);
       }
 
@@ -157,7 +157,7 @@ module.exports = function (gulp, options)
       buffer = buffer.replace(');', '');
 
       // Load buffer as object.
-      var config = vm.runInThisContext('object = ' +buffer);
+      var config = vm.runInThisContext('object = ' + buffer);
 
       // Only modify config.js if map and paths is not empty.
       if (Object.keys(config.map).length > 0 || Object.keys(config.paths).length > 0)
@@ -167,12 +167,12 @@ module.exports = function (gulp, options)
          config.paths = {};
 
          // Rewrite the config.js buffer.
-         buffer = 'System.config(' + JSON.stringify(config, null, 2) +');';
+         buffer = 'System.config(' + JSON.stringify(config, null, 2) + ');';
 
          // Remove quotes around primary keys ignoring babelOptions / `optional`.
          buffer = buffer.replace(/"([a-zA-Z]+)":/g, function(match, p1)
          {
-            return p1 !== 'optional' ? p1 +':' : match;
+            return p1 !== 'optional' ? p1 + ':' : match;
          });
 
          // Rewrite 'config.js'.
@@ -204,7 +204,7 @@ module.exports = function (gulp, options)
    gulp.task('jspm-inspect', function(cb)
    {
       var exec = require('child_process').exec;
-      exec('jspm inspect', { cwd: rootPath }, function (err, stdout, stderr)
+      exec('jspm inspect', { cwd: rootPath }, function(err, stdout, stderr)
       {
          console.log(stdout);
          console.log(stderr);
@@ -218,7 +218,7 @@ module.exports = function (gulp, options)
    gulp.task('jspm-install', function(cb)
    {
       var exec = require('child_process').exec;
-      exec('jspm install', { cwd: rootPath }, function (err, stdout, stderr)
+      exec('jspm install', { cwd: rootPath }, function(err, stdout, stderr)
       {
          console.log(stdout);
          console.log(stderr);
@@ -254,7 +254,7 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
 
          if (!fs.existsSync(destDir))
          {
-            console.error('Could not create destination directory: ' +destDir);
+            console.error('Could not create destination directory: ' + destDir);
             reject();
          }
       }
@@ -264,7 +264,7 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
       var extraConfigType = typeof extraConfig;
       if (extraConfigType === 'string')
       {
-         builder.loadConfigSync(extraConfig)
+         builder.loadConfigSync(extraConfig);
       }
       else if (extraConfigType === 'object')
       {
@@ -273,13 +273,13 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
 
       if (inMemoryBuild)
       {
-         console.log('Bundle queued - srcFilename: ' +srcFilename +'; format: ' +format  +'; mangle: ' +mangle
-          +'; minify: ' +minify);
+         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + format  + '; mangle: ' + mangle
+          + '; minify: ' + minify);
       }
       else
       {
-         console.log('Bundle queued - srcFilename: ' +srcFilename +'; format: ' +format  +'; mangle: ' +mangle
-          +'; minify: ' +minify +'; destDir: ' +destDir +'; destFilepath: ' +destFilepath);
+         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + format  + '; mangle: ' + mangle
+          + '; minify: ' + minify + '; destDir: ' + destDir + '; destFilepath: ' + destFilepath);
       }
 
       var builderPromise;
@@ -300,16 +300,16 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
          builderPromise = builder.buildStatic(srcFilename, destFilepath, builderConfig);
       }
 
-      builderPromise.then(function ()
+      builderPromise.then(function()
       {
          if (inMemoryBuild)
          {
-            console.log('Bundle complete - minify: ' +minify +'; mangle: ' +mangle +'; format: ' +format);
+            console.log('Bundle complete - minify: ' + minify + '; mangle: ' + mangle + '; format: ' + format);
          }
          else
          {
-            console.log('Bundle complete - filename: ' +destFilepath +' minify: ' +minify +'; mangle: ' +mangle
-             +'; format: ' +format);
+            console.log('Bundle complete - filename: ' + destFilepath + ' minify: ' + minify + '; mangle: ' + mangle
+             + '; format: ' + format);
          }
 
          resolve();
@@ -318,12 +318,12 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
       {
          if (inMemoryBuild)
          {
-            console.log('Bundle error - minify: ' +minify + '; mangle: ' +mangle +'; format: ' +format);
+            console.log('Bundle error - minify: ' + minify + '; mangle: ' + mangle + '; format: ' + format);
          }
          else
          {
-            console.log('Bundle error - filename: ' +destFilepath +' minify: ' +minify + '; mangle: ' +mangle
-             +'; format: ' +format);
+            console.log('Bundle error - filename: ' + destFilepath + ' minify: ' + minify + '; mangle: ' + mangle
+             + '; format: ' + format);
          }
 
          console.log(err);

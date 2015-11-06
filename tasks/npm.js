@@ -11,7 +11,7 @@
  * @param {Gulp}     gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
-module.exports = function (gulp, options)
+module.exports = function(gulp, options)
 {
    var rootPath = options.rootPath;
 
@@ -21,7 +21,7 @@ module.exports = function (gulp, options)
    gulp.task('npm-install', function(cb)
    {
       var exec = require('child_process').exec;
-      exec('npm install', { cwd: rootPath }, function (err, stdout, stderr)
+      exec('npm install', { cwd: rootPath }, function(err, stdout, stderr)
       {
          console.log(stdout);
          console.log(stderr);
@@ -35,8 +35,7 @@ module.exports = function (gulp, options)
    gulp.task('npm-outdated', function(cb)
    {
       var exec = require('child_process').exec;
-      exec('npm outdated', { cwd: rootPath },
-       function (err, stdout, stderr)
+      exec('npm outdated', { cwd: rootPath }, function(err, stdout, stderr)
       {
          console.log(stdout);
          console.log(stderr);
@@ -51,7 +50,7 @@ module.exports = function (gulp, options)
    {
       var exec = require('child_process').exec;
       exec('for package in `ls node_modules`; do npm uninstall $package; done;', { cwd: rootPath },
-       function (err, stdout, stderr)
+       function(err, stdout, stderr)
       {
          console.log(stdout);
          console.log(stderr);
