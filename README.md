@@ -24,7 +24,9 @@ The following tasks are available and defined in `typhonjs-core-gulptasks`:
 - [test-basic](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/test.js) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
 
 Latest Update
-- 0.2.0: Added [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) plugin support + updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.3.1` which now does automatic parsing of JSPM packages.
+- 0.2.0: 
+  - Added [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) plugin support + updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.3.1` which now does automatic parsing of JSPM packages.
+  - Added `importTasks` optional parameter which takes an array of task groups to load. The task groups are: 'esdoc', 'eslint', 'git', 'jspm', 'npm', 'test'.
 
 Importing and using `typhonjs-core-gulptasks` is easy and streamlined. 
 
