@@ -10,7 +10,7 @@
 Provides common shared [Gulp](http://gulpjs.com/) tasks for [TyphonJS](https://github.com/typhonjs) and beyond for those using [JSPM](http://jspm.io) / [SystemJS](https://github.com/systemjs/systemjs). By packaging all common Gulp tasks as a NPM package this fascilitates sharing the tasks across several projects / repos and having one authoritative and versioned source for these tasks and all dependencies. Various JSPM & NPM CLI functions are wrapped as tasks allowing execution from IDEs which support Gulp. 
 
 The following tasks are available and defined in `typhonjs-core-gulptasks`:
-- [esdocs](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) support and outputs to the location specified by `esdoc.json`.
+- [esdocs](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/esdoc.js) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) & [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace)support and outputs to the location specified by `esdoc.json`.
 - [eslint](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/eslint.js) - Runs [ESLint](http://eslint.org/) using `.eslintrc` outputting to console and failing on any errors.
 - [git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success executes `git push`. 
 - [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
@@ -64,7 +64,7 @@ The following is an example entry:
   "entryPoints":
   [
     {
-      "inMemoryBuild": false              // Boolean to indicate in memory build; may omit `dest<X>` entries.
+      "inMemoryBuild": false              // (Optional) Indicate in memory build; may omit `dest<X>` entries.
       "destBaseDir": "./dist",            // Root destination directory for bundle output.
       "destFilename": "<filename>.js",    // Destination bundle file name.
       "formats": ["amd", "cjs"],          // Module format to use / also defines destination sub-directory.
