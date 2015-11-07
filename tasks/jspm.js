@@ -152,12 +152,15 @@ module.exports = function(gulp, options)
 
       var buffer = fs.readFileSync(jspmConfigPath, 'utf8');
 
-      // Remove the leading and trailing Javascript SystemJS config method invocation so we are left with a JSON file.
-      buffer = buffer.replace('System.config(', '');
-      buffer = buffer.replace(');', '');
+      var config = {};
 
-      // Load buffer as object.
-      var config = vm.runInThisContext('object = ' + buffer);
+      // Strip enclosing `System.config` wrapper.
+      var match = (/System\.config\(([\s\S]*)\);/).exec(buffer);
+      if (match !== null && match[1])
+      {
+         // Load buffer as object.
+         config = vm.runInThisContext('object = ' + match[1]);
+      }
 
       // Only modify config.js if map and paths is not empty.
       if (Object.keys(config.map).length > 0 || Object.keys(config.paths).length > 0)
