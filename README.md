@@ -38,7 +38,7 @@ First include it as an entry in `devDependencies` in `package.json`:
   "devDependencies": {
     "gulp": "^3.9.0",
     "jspm": "^0.16.14",
-    "typhonjs-core-gulptasks": "^0.1.0"
+    "typhonjs-core-gulptasks": "^0.2.0"
   }
 }
 ```
