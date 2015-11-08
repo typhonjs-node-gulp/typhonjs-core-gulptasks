@@ -71,7 +71,7 @@ module.exports = function(gulp, options)
       {
          var entry = bundleInfo.entryPoints[cntr];
 
-         var inMemoryBuild = entry.inMemoryBuild || false;
+         var inMemoryBuild = entry.inMemoryBuild || argv.travis || process.env.TRAVIS || false;
          var destBaseDir = entry.destBaseDir;
          var destFilename = entry.destFilename;
          var srcFilename = entry.src;

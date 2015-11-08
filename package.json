@@ -1,6 +1,6 @@
 {
    "name": "typhonjs-core-gulptasks",
-   "version": "0.2.0",
+   "version": "0.3.0",
    "homepage": "https://github.com/typhonjs/typhonjs-core-gulptasks/",
    "description": "Provides common gulp tasks shared by TyphonJS and beyond for JSPM / SystemJS projects.",
    "license": "MIT",
@@ -20,8 +20,10 @@
    "dependencies": {
       "jspm": "^0.16.14",
       "bluebird": "^3.0.3",
-      "esdoc-plugin-extends-replace": "^0.1.0",
-      "esdoc-plugin-jspm": "^0.3.1",
+      "esdoc-es7-plugin": "^0.0.3",
+      "esdoc-importpath-plugin": "^0.0.1",
+      "esdoc-plugin-extends-replace": "^0.2.0",
+      "esdoc-plugin-jspm": "^0.4.0",
       "gulp": "^3.9.0",
       "gulp-esdoc": "^0.1.0",
       "gulp-eslint": "^1.0.0",
