@@ -30,7 +30,6 @@ Latest Update
   [esdoc-es7-plugin](https://www.npmjs.com/package/esdoc-es7-plugin) plugin support.
   - updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.4.0` and
   [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) to `0.2.0`.
-  - Added `silent` option which silences logging output.
 
 - 0.2.0: 
   - Added [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) plugin support + updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.3.1` which now does automatic parsing of JSPM packages.
