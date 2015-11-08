@@ -46,7 +46,7 @@ First include it as an entry in `devDependencies` in `package.json`:
   "devDependencies": {
     "gulp": "^3.9.0",
     "jspm": "^0.16.14",
-    "typhonjs-core-gulptasks": "^0.2.0"
+    "typhonjs-core-gulptasks": "^0.3.0"
   }
 }
 ```
@@ -60,7 +60,11 @@ require('typhonjs-core-gulptasks')(gulp, { rootPath: __dirname, srcGlob: './src/
 ```
 
 - `rootPath` defines the base path where JSPM `config.js` is located.
+
 - `srcGlob` defines a [string or array of strings](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpsrcglobs-options) for the location of local sources to be manipulated by the following tasks: `eslint`.
+
+- `importTasks` defines an optional array of strings limiting the category groups of tasks loaded. If this option is not supplied all task categories are loaded. The categories available include: 'esdoc', 'eslint', 'git', 'jspm', 'npm', 'test'. For instance for the ES5 / Node TyphonJS repos `importTasks: ['eslint', 'npm']` is used to just load eslint and npm related tasks. 
+
 
 The `esdoc` task requires a valid [esdoc.json](https://esdoc.org/config.html) file in the root project path.
 
