@@ -24,7 +24,7 @@ The following tasks are available and defined in `typhonjs-core-gulptasks`:
 - [npm-uninstall](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js) - Executes `npm uninstall` via NPM CLI.
 - [test-basic](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/test.js) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
 
-Latest Update
+Latest significant changes:
 - 0.3.0:
   - For esdoc task added [esdoc-importpath-plugin](https://www.npmjs.com/package/esdoc-importpath-plugin]) and
   [esdoc-es7-plugin](https://www.npmjs.com/package/esdoc-es7-plugin) plugin support.
@@ -44,8 +44,8 @@ First include it as an entry in `devDependencies` in `package.json`:
   
   "devDependencies": {
     "gulp": "^3.9.0",
-    "jspm": "^0.16.14",
-    "typhonjs-core-gulptasks": "^0.3.0"
+    "jspm": "^0.16.19",
+    "typhonjs-core-gulptasks": "^0.3.1"
   }
 }
 ```
@@ -102,7 +102,7 @@ The following is an example entry:
 
 Please note that `extraConfig` can be a string / file path relative to the project root path that defines an additional JSPM styled configuration file like `config.js` (wrapped in a `System.config({ ... });` statement). This is particularly useful to define additional user supplied mapped paths that incorporate normalized JSPM package paths resolved from `config.js`. If an object literal / hash is supplied it is loaded directly.
 
-For a comprehensive demo and tutorial see the [backbone-parse-es6-demo](https://github.com/typhonjs/backbone-parse-es6-demo) repo which uses `typhonjs-core-gulptasks`.
+For a comprehensive demo and tutorial see the [backbone-parse-es6-todos](https://github.com/typhonjs-demos/backbone-parse-es6-todos) repo which uses `typhonjs-core-gulptasks`.
 
 typhonjs-core-gulptasks (c) 2015-present Michael Leahy, TyphonRT, Inc.
 
