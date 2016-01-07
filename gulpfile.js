@@ -6,12 +6,7 @@
 var gulp = require('gulp');
 
 // require all tasks
-require('./index.js')(gulp,
-{
-   rootPath: __dirname,
-   importTasks: ['eslint', 'npm'],
-   srcGlob: ['index.js', './tasks/**/*.js']
-});
+require('./index.js')(gulp, { rootPath: __dirname, srcGlob: ['index.js', './tasks/**/*.js'] });
 
 /**
  * Generates task listing
