@@ -6,6 +6,10 @@
  *
  * `npm-outdated` - Runs `npm outdated` via NPM CLI.
  *
+ * `npm-run-test` - Runs `npm run test` via NPM CLI.
+ *
+ * `npm-run-test-coverage` - Runs `npm run test-coverage` via NPM CLI.
+ *
  * `npm-uninstall` - Runs `npm uninstall <package>` via NPM CLI for all node modules installed.
  *
  * @param {Gulp}     gulp     - An instance of Gulp.
