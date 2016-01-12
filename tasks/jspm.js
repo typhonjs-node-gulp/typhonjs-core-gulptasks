@@ -279,9 +279,6 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
 
       var builder = new jspm.Builder();
 
-//      console.log("!!!! builder keys: " + Object.keys(builder));
-//      console.log("!!!! builder: " + JSON.stringify(builder));
-
       var extraConfigType = typeof extraConfig;
       if (extraConfigType === 'string')
       {
