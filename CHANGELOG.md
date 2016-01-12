@@ -1,4 +1,4 @@
-## 0.3.0 (2016-01-12)
+## 0.4.0 (2016-01-12)
 - updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.5.0` and
 [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) to `0.3.0`.
 - comments can now be used in bundle-config.json and bundle-config-travis.json files for jspm-bundle task.
