@@ -5,8 +5,8 @@
  * `jspm-bundle` - Bundles the project via the config file found in `./config/bundle-config.json` or
  * `./config/bundle-config-travis.json` if `--travis` is supplied as an argument to Gulp.
  *
- * `jspm-clear-config` - Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`.
- * Performs a git commit if `config.js` was modified.
+ * `jspm-clear-config` - Removes all `paths` and `map` entries that may be populated in the primary JSPM config file.
+ * Performs a git commit if the config file was modified.
  *
  * `jspm-clear-config-git-push` - Runs `test-basic` then runs in sequence the following tasks: `jspm-clear-config` and
  * `git-push`
@@ -19,9 +19,9 @@
  * @param {object}   options  - Optional parameters
  */
 var argv =     require('yargs').argv;
-var fs =       require('fs');
+var fs =       require('fs-extra');
 
-var Promise =  require("bluebird");
+var Promise =  require('bluebird');
 
 module.exports = function(gulp, options)
 {
@@ -55,17 +55,22 @@ module.exports = function(gulp, options)
     */
    gulp.task('jspm-bundle', function()
    {
-      var jspm = require('jspm');
-      var path = require('path');
+      var jspm =              require('jspm');
+      var path =              require('path');
+      var stripJsonComments = require('strip-json-comments');
 
-      // Set the package path to the local root where config.js is located.
+      // Set the package path to the local root.
       jspm.setPackagePath(rootPath);
 
       var promiseList = [];
 
       // When testing the build in Travis CI we only need to run a single bundle operation.
-      var bundleInfo = argv.travis || process.env.TRAVIS ? require(rootPath + path.sep + 'config' + path.sep
-       + 'bundle-config-travis.json') : require(rootPath + path.sep + 'config' + path.sep + 'bundle-config.json');
+      var bundleInfoPath = argv.travis || process.env.TRAVIS ? rootPath + path.sep + 'config' + path.sep
+       + 'bundle-config-travis.json' : rootPath + path.sep + 'config' + path.sep + 'bundle-config.json';
+
+      // Strip comments
+      var bundleJSON = fs.readFileSync(bundleInfoPath).toString();
+      var bundleInfo = JSON.parse(stripJsonComments(bundleJSON));
 
       for (var cntr = 0; cntr < bundleInfo.entryPoints.length; cntr++)
       {
@@ -91,7 +96,7 @@ module.exports = function(gulp, options)
             // Attempt to create destBaseDir directory if it does not exist.
             if (!fs.existsSync(destBaseDir))
             {
-               fs.mkdirSync(destBaseDir);
+               fs.mkdirsSync(destBaseDir);
             }
 
             // Error out early if destBaseDir does not exist.
@@ -136,21 +141,30 @@ module.exports = function(gulp, options)
     */
    gulp.task('jspm-clear-config', function(cb)
    {
-      var exec = require('child_process').exec;
-      var fs = require('fs');
-      var path = require('path');
-      var vm = require('vm');
+      var exec =           require('child_process').exec;
+      var jspm =           require('jspm');
+      var path =           require('path');
+      var vm =             require('vm');
 
-      // The location of the JSPM `config.js` configuration file.
-      var jspmConfigPath = rootPath + path.sep + 'config.js';
+      var PackageConfig =  require('jspm/lib/config/package.js');
 
-      if (!fs.existsSync(jspmConfigPath))
+      // Set the package path to the local root.
+      jspm.setPackagePath(rootPath);
+
+      // Loads JSPM package.json to find JSPM config file path.
+      var pjsonPath = process.env.jspmConfigPath || rootPath + path.sep + 'package.json';
+      var pjson = new PackageConfig(pjsonPath);
+      pjson.read(false, true);
+
+      if (!fs.existsSync(pjson.configFile))
       {
-         console.error('Could not locate JSPM `config.js` at: ' + jspmConfigPath);
+         console.error('Could not locate JSPM config at: ' + pjson.configFile);
          process.exit(1);
       }
 
-      var buffer = fs.readFileSync(jspmConfigPath, 'utf8');
+      console.log('Clearing JSPM config at: ' + pjson.configFile);
+
+      var buffer = fs.readFileSync(pjson.configFile, 'utf8');
 
       var config = {};
 
@@ -179,10 +193,11 @@ module.exports = function(gulp, options)
          });
 
          // Rewrite 'config.js'.
-         fs.writeFileSync(jspmConfigPath, buffer);
+         fs.writeFileSync(pjson.configFile, buffer);
 
          // Execute git commit.
-         exec("git commit -m 'Removed extra config.js data' config.js", { cwd: rootPath }, function(err, stdout, stderr)
+         exec("git commit -m 'Removed extra data from JSPM config' config.js", { cwd: rootPath },
+          function(err, stdout, stderr)
          {
             console.log(stdout);
             console.log(stderr);
@@ -252,7 +267,7 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
       {
          if (!fs.existsSync(destDir))
          {
-            fs.mkdirSync(destDir);
+            fs.mkdirsSync(destDir);
          }
 
          if (!fs.existsSync(destDir))
@@ -262,7 +277,10 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
          }
       }
 
-      var builder = new jspm.Builder('./config.js');
+      var builder = new jspm.Builder();
+
+//      console.log("!!!! builder keys: " + Object.keys(builder));
+//      console.log("!!!! builder: " + JSON.stringify(builder));
 
       var extraConfigType = typeof extraConfig;
       if (extraConfigType === 'string')
@@ -294,7 +312,7 @@ function buildStatic(jspm, inMemoryBuild, srcFilename, destDir, destFilepath, mi
       };
 
       // When testing we only need to do an in memory build.
-      if (inMemoryBuild || argv.travis || process.env.TRAVIS)
+      if (inMemoryBuild)
       {
          builderPromise = builder.buildStatic(srcFilename, builderConfig);
       }
