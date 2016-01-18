@@ -17,6 +17,9 @@
  */
 module.exports = function(gulp, options)
 {
+   var path =     require('path');
+   var fs =       require('fs-extra');
+
    var rootPath = options.rootPath;
 
    /**
@@ -47,33 +50,35 @@ module.exports = function(gulp, options)
       });
    });
 
-   /**
-    * Runs `npm run test` via NPM CLI. This will run a script associated with `test`.
-    */
-   gulp.task('npm-run-test', function(cb)
-   {
-      var exec = require('child_process').exec;
-      exec('npm run test', { cwd: rootPath }, function(err, stdout, stderr)
-      {
-         console.log(stdout);
-         console.log(stderr);
-         cb(err);
-      });
-   });
+   // Load any package.json in `rootPath` and add Gulp tasks to invoke any script entries.
 
-   /**
-    * Runs `npm run test-coverage` via NPM CLI. This will run a script associated with `test-coverage`.
-    */
-   gulp.task('npm-run-test-coverage', function(cb)
+   var packageJSONPath = rootPath + path.sep + 'package.json';
+
+   if (fs.existsSync(packageJSONPath))
    {
-      var exec = require('child_process').exec;
-      exec('npm run test-coverage', { cwd: rootPath }, function(err, stdout, stderr)
+      var packageJSON = require(packageJSONPath);
+
+      // If a scripts entry exists then create Gulp tasks to invoke them.
+      if (typeof packageJSON.scripts === 'object')
       {
-         console.log(stdout);
-         console.log(stderr);
-         cb(err);
-      });
-   });
+         Object.keys(packageJSON.scripts).forEach(function(element)
+         {
+            /**
+             * Runs `npm run <script name>` via NPM CLI.
+             */
+            gulp.task('npm-run-' + element, function(cb)
+            {
+               var exec = require('child_process').exec;
+               exec('npm run ' + element, { cwd: rootPath }, function(err, stdout, stderr)
+               {
+                  console.log(stdout);
+                  console.log(stderr);
+                  cb(err);
+               });
+            });
+         });
+      }
+   }
 
    /**
     * Runs `npm uninstall <package>` via NPM CLI for all node modules installed.
