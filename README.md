@@ -21,12 +21,14 @@ The following tasks are available and defined in `typhonjs-core-gulptasks`:
 - [jspm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L236) - Executes `jspm install` via JSPM CLI.
 - [npm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L21) - Executes `npm install` via NPM CLI.
 - [npm-outdated](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L35) - Executes `npm outdated` via NPM CLI.
-- [npm-run-test](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L49) - Executes `npm run test` via NPM CLI.
-- [npm-run-test-coverage](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L63) - Executes `npm run test-coverage` via NPM CLI.
+- [`npm-run-<script name>`](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L55) - Creates Gulp tasks dynamically generated from script entries found in `package.json` in the `rootPath`. Executes `npm run <script name>` via NPM CLI.
 - [npm-uninstall](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L77) - Executes `npm uninstall` via NPM CLI.
 - [test-basic](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/test.js#L14) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
 
 Latest significant changes:
+- 0.4.1:
+  - Added `npm-run-<script>`; dynamically creating Gulp tasks from any script entries `package.json` found in `rootPath`. 
+
 - 0.4.0:
   - updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.5.0` and
   [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) to `0.3.0`.
