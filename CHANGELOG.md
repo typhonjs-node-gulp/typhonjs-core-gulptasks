@@ -1,3 +1,6 @@
+## 0.4.1 (2016-01-17)
+- Added npm-run-<script>; dynamically creating Gulp tasks from `package.json` found in `rootPath`. 
+
 ## 0.4.0 (2016-01-12)
 - updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.5.0` and
 [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) to `0.3.0`.
