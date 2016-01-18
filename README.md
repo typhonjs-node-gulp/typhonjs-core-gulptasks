@@ -27,7 +27,7 @@ The following tasks are available and defined in `typhonjs-core-gulptasks`:
 
 Latest significant changes:
 - 0.4.1:
-  - Added `npm-run-<script>`; dynamically creating Gulp tasks from any script entries `package.json` found in `rootPath`. 
+  - Added `npm-run-<script name>`; dynamically creating Gulp tasks from any script entries `package.json` found in `rootPath`. 
 
 - 0.4.0:
   - updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.5.0` and
