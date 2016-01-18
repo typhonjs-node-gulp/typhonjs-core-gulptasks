@@ -38,6 +38,7 @@
    },
    "main": "index.js",
    "scripts": {
+      "test-script": ""
    },
    "keywords": [
       "esdoc",

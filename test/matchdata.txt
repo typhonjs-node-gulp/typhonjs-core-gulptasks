@@ -15,8 +15,7 @@ Sub Tasks
     local-test
     npm-install
     npm-outdated
-    npm-run-test
-    npm-run-test-coverage
+    npm-run-test-script
     npm-uninstall
     test-basic
     verify-test
