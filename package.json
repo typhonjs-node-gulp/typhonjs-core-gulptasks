@@ -23,14 +23,14 @@
       "esdoc-importpath-plugin": "^0.0.1",
       "esdoc-plugin-extends-replace": "^0.3.0",
       "esdoc-plugin-jspm": "^0.5.0",
-      "fs-extra": "^0.26.0",
+      "fs-extra": "^0.26.4",
       "gulp": "^3.9.0",
       "gulp-esdoc": "^0.2.0",
       "gulp-eslint": "^1.1.1",
-      "jspm": "^0.16.23",
+      "jspm": "^0.16.24",
       "run-sequence": "^1.1.5",
       "strip-json-comments": "^2.0.0",
-      "yargs": "^3.31.0"
+      "yargs": "^3.32.0"
    },
    "devDependencies": {
       "gulp-task-listing": "^1.0.1",
