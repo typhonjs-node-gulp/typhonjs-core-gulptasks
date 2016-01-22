@@ -9,11 +9,11 @@
 module.exports = function(gulp, options)
 {
    options = options || {};
-   var importTasks = options.importTasks || ['esdoc', 'eslint', 'git', 'jspm', 'npm', 'test'];
+   options.importTasks = options.importTasks || ['esdoc', 'eslint', 'git', 'jspm', 'npm', 'test'];
 
-   for (var cntr = 0; cntr < importTasks.length; cntr++)
+   for (var cntr = 0; cntr < options.importTasks.length; cntr++)
    {
-      switch (importTasks[cntr])
+      switch (options.importTasks[cntr])
       {
          case 'esdoc':
             require('./tasks/esdoc.js')(gulp, options);

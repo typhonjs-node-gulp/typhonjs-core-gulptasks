@@ -5,18 +5,23 @@
  * `test-basic` - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle`; useful for basic testing and Travis CI.
  *
  * @param {Gulp}  gulp  - An instance of Gulp.
+ * @param {object}   options  - Optional parameters
  */
-module.exports = function(gulp)
+module.exports = function(gulp, options)
 {
-   /**
-    * Runs `eslint` and `jspm-bundle`; useful for basic testing and Travis CI.
-    */
-   gulp.task('test-basic', function(cb)
+   // Only add task if eslint & jspm tasks are also included.
+   if (options.importTasks.indexOf('eslint') >= 0 && options.importTasks.indexOf('jspm') >= 0)
    {
-      // Set TRAVIS environment variable to run all tasks in testing mode.
-      process.env.TRAVIS = true;
+      /**
+       * Runs `eslint` and `jspm-bundle`; useful for basic testing and Travis CI.
+       */
+      gulp.task('test-basic', function(cb)
+      {
+         // Set TRAVIS environment variable to run all tasks in testing mode.
+         process.env.TRAVIS = true;
 
-      var runSequence = require('run-sequence').use(gulp);
-      runSequence('eslint', 'jspm-bundle', cb);
-   });
+         var runSequence = require('run-sequence').use(gulp);
+         runSequence('eslint', 'jspm-bundle', cb);
+      });
+   }
 };
