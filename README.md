@@ -13,38 +13,20 @@ The following tasks are available and defined in `typhonjs-core-gulptasks`:
 - [esdocs](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/esdoc.js#L19) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm), [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace), [esdoc-importpath-plugin](https://www.npmjs.com/package/esdoc-importpath-plugin) and
 [esdoc-es7-plugin](https://www.npmjs.com/package/esdoc-es7-plugin) support and outputs to the location specified by `esdoc.json`.
 - [eslint](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/eslint.js#L21) - Runs [ESLint](http://eslint.org/) via [gulp-eslint](https://www.npmjs.com/package/gulp-eslint) using `.eslintrc` outputting to console and failing on any errors.
-- [git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/git.js) - Verifies the build by running `test-basic` and on success executes `git push`. 
-- [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L56) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
-- [jspm-clear-config](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L142) - Removes all `paths` and `map` entries that may be populated in the primary JSPM config file. Performs a git commit if the config file was modified.
-- [jspm-clear-config-git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L213) - Verifies the build by running `test-basic` and on success runs `jspm-clear-config` then `git-push` tasks. 
-- [jspm-dl-loader](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L222) - Executes `jspm dl-loader` via JSPM CLI.
-- [jspm-inspect](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L222) - Executes `jspm inspect` via JSPM CLI.
-- [jspm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L236) - Executes `jspm install` via JSPM CLI.
+- [git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/git.js#L25) - Verifies the build by running `test-basic` and on success executes `git push`. 
+- [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L67) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+- [jspm-clear-config](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L177) - Removes all `paths` and `map` entries that may be populated in the primary JSPM config file. Performs a git commit if the config file was modified.
+- [jspm-clear-config-git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L251) - Verifies the build by running `test-basic` and on success runs `jspm-clear-config` then `git-push` tasks. 
+- [jspm-dl-loader](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L261) - Executes `jspm dl-loader` via JSPM CLI.
+- [jspm-inspect](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L275) - Executes `jspm inspect` via JSPM CLI.
+- [jspm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L289) - Executes `jspm install` via JSPM CLI.
 - [npm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L21) - Executes `npm install` via NPM CLI.
 - [npm-outdated](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L35) - Executes `npm outdated` via NPM CLI.
 - [`npm-run-<script name>`](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L55) - Creates Gulp tasks dynamically generated from script entries found in `package.json` in the `rootPath`. Executes `npm run <script name>` via NPM CLI.
 - [npm-uninstall](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L77) - Executes `npm uninstall` via NPM CLI.
-- [test-basic](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/test.js#L14) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+- [test-basic](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/test.js#L18) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
 
-Latest significant changes:
-- 0.4.1:
-  - Added `npm-run-<script name>`; dynamically creating Gulp tasks from any script entries `package.json` found in `rootPath`. 
-
-- 0.4.0:
-  - updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.5.0` and
-  [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) to `0.3.0`.
-  - comments can now be used in bundle-config.json and bundle-config-travis.json files for jspm-bundle task.
-  - Added npm-run-test and npm-run-test-coverage which will run `test` and `test-coverage` scripts defined in `package.json`.
-  
-- 0.3.0:
-  - For esdoc task added [esdoc-importpath-plugin](https://www.npmjs.com/package/esdoc-importpath-plugin]) and
-  [esdoc-es7-plugin](https://www.npmjs.com/package/esdoc-es7-plugin) plugin support.
-  - updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.4.0` and
-  [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) to `0.2.0`.
-
-- 0.2.0: 
-  - Added [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) plugin support + updated [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) to `0.3.1` which now does automatic parsing of JSPM packages.
-  - Added `importTasks` optional parameter which takes an array of task groups to load. The task groups are: 'esdoc', 'eslint', 'git', 'jspm', 'npm', 'test'.
+For the latest significant changes please see the [CHANGELOG](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/CHANGELOG.md).
 
 Importing and using `typhonjs-core-gulptasks` is easy and streamlined. 
 
@@ -55,8 +37,8 @@ First include it as an entry in `devDependencies` in `package.json`:
   
   "devDependencies": {
     "gulp": "^3.9.0",
-    "jspm": "^0.16.21",
-    "typhonjs-core-gulptasks": "^0.4.0"
+    "jspm": "^0.16.24",
+    "typhonjs-core-gulptasks": "^0.4.2"
   }
 }
 ```
@@ -109,9 +91,9 @@ The following is an example entry:
           "underscore": { "build": false }
         }
       },
-      "builderOptions":                   // (Optional) an object hash of any parameters for SystemJS Builder. This example
-      {                                   // sets `globalDeps` for loading `jquery` and `underscore` for UMD and global
-        "globalDeps":                     // bundles.
+      "builderOptions":                   // (Optional) an object hash of any valid parameters for SystemJS Builder. This 
+      {                                   // example sets `globalDeps` for associating `jquery` and `underscore` for UMD  
+        "globalDeps":                     // and global bundles.
         {
           "jquery": "$",
           "underscore": "_"
