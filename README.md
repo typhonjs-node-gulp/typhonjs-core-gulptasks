@@ -17,6 +17,7 @@ The following tasks are available and defined in `typhonjs-core-gulptasks`:
 - [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L56) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
 - [jspm-clear-config](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L142) - Removes all `paths` and `map` entries that may be populated in the primary JSPM config file. Performs a git commit if the config file was modified.
 - [jspm-clear-config-git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L213) - Verifies the build by running `test-basic` and on success runs `jspm-clear-config` then `git-push` tasks. 
+- [jspm-dl-loader](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L222) - Executes `jspm dl-loader` via JSPM CLI.
 - [jspm-inspect](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L222) - Executes `jspm inspect` via JSPM CLI.
 - [jspm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L236) - Executes `jspm install` via JSPM CLI.
 - [npm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L21) - Executes `npm install` via NPM CLI.
@@ -80,9 +81,11 @@ The `esdoc` task requires a valid [esdoc.json](https://esdoc.org/config.html) fi
 The `eslint` task requires a valid [.eslintrc](http://eslint.org/docs/user-guide/configuring.html) file in the root project path. 
 
 The `jspm-bundle` task requires two configuration files to be defined in `./config`:
-- `./config/bundle-config.js` - Provides the main bundle configuration.
+- `./config/bundle-config.json` - Provides the main bundle configuration.
 
-- `./config/bundle-config-travis.js` - Provides the testing / Travis bundle configuration which is used for an in memory bundle op by SystemJS Builder.
+- `./config/bundle-config-travis.json` - Provides the testing / Travis bundle configuration which is used for an in memory bundle op by SystemJS Builder.
+
+You may use comments in the bundle-config JSON files as they are stripped. 
 
 The following is an example entry:
 ```
@@ -90,19 +93,28 @@ The following is an example entry:
   "entryPoints":
   [
     {
-      "inMemoryBuild": false              // (Optional) Indicate in memory build; may omit `dest<X>` entries.
+      "buildType": "buildStatic",         // (Optional) 'buildStatic' is the default; use 'bundle' for non-SFX build.
+      "inMemoryBuild": false              // (Optional) Indicates in memory build; may omit `dest<X>` entries.
       "destBaseDir": "./dist",            // Root destination directory for bundle output.
       "destFilename": "<filename>.js",    // Destination bundle file name.
       "formats": ["amd", "cjs"],          // Module format to use / also defines destination sub-directory.
       "mangle": false,                    // Uglify mangle property used by SystemJS Builder.
       "minify": false,                    // Minify property used by SystemJS Builder.
       "src": "<dir>/<filename>.js",       // Entry source point for SystemJS Builder
-      "extraConfig":                      // Defines additional JSPM config parameters to load after ./config.js is
-      {                                   // loaded. Provide a string and it will be interpreted as an additional
-        "meta":                           // configuration file styled like `config.js` or provide an object hash
-        {                                 // which is loaded directly.  This example skips building `jquery` and    
-          "jquery": { "build": false },   // `underscore`.
+      "extraConfig":                      // (Optional) Defines additional JSPM config parameters to load after
+      {                                   // ./config.js is loaded. Provide a string or array of strings and they
+        "meta":                           // will be interpreted as an additional configuration file styled like
+        {                                 // `config.js` or provide an object hash which is loaded directly.  This
+          "jquery": { "build": false },   // example skips building `jquery` and `underscore`.
           "underscore": { "build": false }
+        }
+      },
+      "builderOptions":                   // (Optional) an object hash of any parameters for SystemJS Builder. This example
+      {                                   // sets `globalDeps` for loading `jquery` and `underscore` for UMD and global
+        "globalDeps":                     // bundles.
+        {
+          "jquery": "$",
+          "underscore": "_"
         }
       }
     }
@@ -110,7 +122,7 @@ The following is an example entry:
 }
 ```
 
-Please note that `extraConfig` can be a string / file path relative to the project root path that defines an additional JSPM styled configuration file like `config.js` (wrapped in a `System.config({ ... });` statement). This is particularly useful to define additional user supplied mapped paths that incorporate normalized JSPM package paths resolved from `config.js`. If an object literal / hash is supplied it is loaded directly.
+Please note that `extraConfig` can be a string or array of strings of filepaths relative to the project root path that defines an additional JSPM styled configuration file like `config.js` (wrapped in a `System.config({ ... });` statement). This is particularly useful to define additional user supplied mapped paths that incorporate normalized JSPM package paths resolved from `config.js`. If an object literal / hash is supplied it is loaded directly.
 
 For a comprehensive demo and tutorial see the [backbone-parse-es6-todos](https://github.com/typhonjs-demos/backbone-parse-es6-todos) repo which uses `typhonjs-core-gulptasks`.
 
