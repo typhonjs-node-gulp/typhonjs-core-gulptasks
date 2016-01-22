@@ -47,7 +47,7 @@ module.exports = function(gulp, options)
     *       "minify": false,                 // Minify mangle property used by SystemJS Builder.
     *       "src": "src/ModuleRuntime.js",   // Entry source point for SystemJS Builder
     *       "extraConfig":                   // (Optional) Defines additional JSPM config parameters to load after
-    *       {                                // ./config.json is loaded. Provide a string or array of strings and they
+    *       {                                // ./config.js is loaded. Provide a string or array of strings and they
     *          "meta":                       // will be interpreted as an additional configuration file styled like
     *          {                             // `config.js` or provide an object hash which is loaded directly.  This
     *             "jquery": { "build": false },    // example skips building `jquery` and `underscore`.
