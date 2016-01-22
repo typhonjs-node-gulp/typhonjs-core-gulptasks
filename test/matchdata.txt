@@ -10,6 +10,7 @@ Sub Tasks
     jspm-bundle
     jspm-clear-config
     jspm-clear-config-git-push
+    jspm-dl-loader
     jspm-inspect
     jspm-install
     local-test
