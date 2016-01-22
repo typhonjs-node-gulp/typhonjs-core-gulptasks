@@ -1,3 +1,7 @@
+## 0.4.2 (2016-01-22)
+- Added `jspm-dl-loader`; Executes `jspm dl-loader` via JSPM CLI. 
+- Added optional `builderOptions` object hash in bundle-config.json and bundle-config-travis.json files for `jspm-bundle` task. Any extra options available to SystemJS Builder are defined here. 
+
 ## 0.4.1 (2016-01-17)
 - Added `npm-run-<script>`; dynamically creating Gulp tasks from all script entries `package.json` found in `rootPath`. 
 
