@@ -79,7 +79,7 @@ The following is an example entry:
       "inMemoryBuild": false              // (Optional) Indicates in memory build; may omit `dest<X>` entries.
       "destBaseDir": "./dist",            // Root destination directory for bundle output.
       "destFilename": "<filename>.js",    // Destination bundle file name.
-      "formats": ["amd", "cjs"],          // Module format to use / also defines destination sub-directory.
+      "formats": ["amd", "cjs", "umd"],   // Module format to use / also defines destination sub-directory.
       "mangle": false,                    // Uglify mangle property used by SystemJS Builder.
       "minify": false,                    // Minify property used by SystemJS Builder.
       "src": "<dir>/<filename>.js",       // Entry source point for SystemJS Builder
