@@ -350,15 +350,16 @@ function builderBundle(jspm, buildType, inMemoryBuild, srcFilename, destDir, des
       }
 
       var builderOptionsString = JSON.stringify(builderOptions);
+      var builderOptionsFormat = builderOptions.format;
 
       if (inMemoryBuild)
       {
-         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + builderOptions.format
+         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + builderOptionsFormat
           + '; builderOptions: ' + builderOptionsString);
       }
       else
       {
-         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + builderOptions.format
+         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + builderOptionsFormat
           + '; builderOptions: ' + builderOptionsString + '; destDir: ' + destDir + '; destFilepath: ' + destFilepath);
       }
 
@@ -378,12 +379,12 @@ function builderBundle(jspm, buildType, inMemoryBuild, srcFilename, destDir, des
       {
          if (inMemoryBuild)
          {
-            console.log('Bundle complete - format: ' + builderOptions.format + '; builderOptions: '
+            console.log('Bundle complete - format: ' + builderOptionsFormat + '; builderOptions: '
              + builderOptionsString);
          }
          else
          {
-            console.log('Bundle complete - format: ' + builderOptions.format + '; filename: ' + destFilepath
+            console.log('Bundle complete - format: ' + builderOptionsFormat + '; filename: ' + destFilepath
              + '; builderOptions: ' + builderOptionsString);
          }
 
