@@ -394,12 +394,12 @@ function builderBundle(jspm, buildType, inMemoryBuild, srcFilename, destDir, des
       {
          if (inMemoryBuild)
          {
-            console.error('Bundle error - format: ' + builderOptions.format + '; builderOptions: '
+            console.error('Bundle error - format: ' + builderOptionsFormat + '; builderOptions: '
              + builderOptionsString);
          }
          else
          {
-            console.error('Bundle error - format: ' + builderOptions.format + '; filename: ' + destFilepath
+            console.error('Bundle error - format: ' + builderOptionsFormat + '; filename: ' + destFilepath
              + '; builderOptions: ' + builderOptionsString);
          }
 
