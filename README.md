@@ -30,7 +30,7 @@ https://www.npmjs.com/package/electron-packager#programmatic-api
   - [git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/git.js#L23) - Verifies the build by running `test-basic` and on success executes `git push`. 
 
 - `jspm`:
-  - [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L73) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+  - [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L73) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.). When running from the command line you may use `gulp jspm-bundle --bundleConfig=<path/to/custom/config.json>` to use a specific customized bundle configuration. 
 
   - [jspm-clear-config](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L195) - Removes all `paths` and `map` entries that may be populated in the primary JSPM config file. Performs a git commit if the config file was modified.
 
