@@ -9,27 +9,53 @@
 
 Provides common shared [Gulp](http://gulpjs.com/) tasks for [TyphonJS](https://github.com/typhonjs) and beyond for those using [JSPM](http://jspm.io) / [SystemJS](https://github.com/systemjs/systemjs). By packaging all common Gulp tasks as a NPM package this fascilitates sharing the tasks across several projects / repos having one authoritative and versioned source for these tasks and all dependencies. Various JSPM & NPM CLI functions are wrapped as tasks allowing execution from IDEs which support Gulp. 
 
-The following tasks are available and defined in `typhonjs-core-gulptasks`:
-- [`electron-package-<platform>-<arch>`](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/electron.js#L130) - Invokes [electron-packager](https://www.npmjs.com/package/electron-packager) with the options from `electron.json` in the root path. Default values are provided for `platform` -> 'process.platform', `arch` -> 'process.arch', `source` -> '.' and `out` -> 'build' if not supplied. For options to provide in `electron.json` please see:
+The following tasks are available and defined in `typhonjs-core-gulptasks` with the following categories:
+
+- `electron`:
+  - [`electron-package-<platform>-<arch>`](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/electron.js#L130) - Invokes [electron-packager](https://www.npmjs.com/package/electron-packager) with the options from `electron.json` in the root path. Default values are provided for `platform` -> 'process.platform', `arch` -> 'process.arch', `source` -> '.' and `out` -> 'build' if not supplied. For options to provide in `electron.json` please see:
 https://www.npmjs.com/package/electron-packager#programmatic-api
-- [electron-start](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/electron.js#L52) - Spawns `electron .` starting the app defined in `package.json->main` entry in the root path. 
-- [electron-start-debug](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/electron.js#L60) - Spawns `electron --debug=5858 .` starting the app defined in `package.json->main` entry in the root path. 
-- [esdocs](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/esdoc.js#L20) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm), [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace), [esdoc-importpath-plugin](https://www.npmjs.com/package/esdoc-importpath-plugin) and
+
+  - [electron-start](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/electron.js#L52) - Spawns `electron .` starting the app defined in `package.json->main` entry in the root path. 
+
+  - [electron-start-debug](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/electron.js#L60) - Spawns `electron --debug=5858 .` starting the app defined in `package.json->main` entry in the root path. 
+
+- `esdocs`:
+  - [esdocs](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/esdoc.js#L20) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [gulp-esdoc](https://www.npmjs.com/package/gulp-esdoc) including [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm), [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace), [esdoc-importpath-plugin](https://www.npmjs.com/package/esdoc-importpath-plugin) and
 [esdoc-es7-plugin](https://www.npmjs.com/package/esdoc-es7-plugin) support and outputs to the location specified by `esdoc.json`.
-- [eslint](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/eslint.js#L22) - Runs [ESLint](http://eslint.org/) via [gulp-eslint](https://www.npmjs.com/package/gulp-eslint) using `.eslintrc` outputting to console and failing on any errors.
-- [git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/git.js#L23) - Verifies the build by running `test-basic` and on success executes `git push`. 
-- [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L73) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
-- [jspm-clear-config](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L195) - Removes all `paths` and `map` entries that may be populated in the primary JSPM config file. Performs a git commit if the config file was modified.
-- [jspm-clear-config-git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L275) - Verifies the build by running `test-basic` and on success runs `jspm-clear-config` then `git-push` tasks. 
-- [jspm-dl-loader](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L287) - Executes `jspm dl-loader` via JSPM CLI.
-- [jspm-inspect](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L303) - Executes `jspm inspect` via JSPM CLI.
-- [jspm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L319) - Executes `jspm install` via JSPM CLI.
-- [npm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L29) - Executes `npm install` via NPM CLI.
-- [npm-list-depth-0](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L45) - Executes `npm list --depth=0` via NPM CLI.
-- [npm-outdated](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L61) - Executes `npm outdated` via NPM CLI.
-- [`npm-run-<script name>`](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L90) - Creates Gulp tasks dynamically generated from script entries found in `package.json` in the `rootPath`. Executes `npm run <script name>` via NPM CLI.
-- [npm-uninstall](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L109) - Executes `npm uninstall` via NPM CLI.
-- [test-basic](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/test.js#L19) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+
+- `eslint`:
+  - [eslint](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/eslint.js#L22) - Runs [ESLint](http://eslint.org/) via [gulp-eslint](https://www.npmjs.com/package/gulp-eslint) using `.eslintrc` outputting to console and failing on any errors.
+
+- `git`:
+  - [git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/git.js#L23) - Verifies the build by running `test-basic` and on success executes `git push`. 
+
+- `jspm`:
+  - [jspm-bundle](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L73) - Creates one or more bundles defined in `./config/bundle-config.json` or `./config/bundle-config-travis.json` (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+
+  - [jspm-clear-config](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L195) - Removes all `paths` and `map` entries that may be populated in the primary JSPM config file. Performs a git commit if the config file was modified.
+
+  - [jspm-clear-config-git-push](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L275) - Verifies the build by running `test-basic` and on success runs `jspm-clear-config` then `git-push` tasks. 
+
+  - [jspm-dl-loader](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L287) - Executes `jspm dl-loader` via JSPM CLI.
+
+  - [jspm-inspect](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L303) - Executes `jspm inspect` via JSPM CLI.
+
+  - [jspm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/jspm.js#L319) - Executes `jspm install` via JSPM CLI.
+
+- `npm`:
+  - [npm-install](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L29) - Executes `npm install` via NPM CLI.
+
+  - [npm-list-depth-0](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L45) - Executes `npm list --depth=0` via NPM CLI.
+
+  - [npm-outdated](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L61) - Executes `npm outdated` via NPM CLI.
+
+  - [`npm-run-<script name>`](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L90) - Creates Gulp tasks dynamically generated from script entries found in `package.json` in the `rootPath`. Executes `npm run <script name>` via NPM CLI.
+
+  - [npm-uninstall](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/npm.js#L109) - Executes `npm uninstall` via NPM CLI.
+
+- `test`:
+  - [test-basic](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/tasks/test.js#L19) - Sets process.env.TRAVIS and runs `eslint` and `jspm-bundle` tasks for basic testing.  (Add `--travis` argument to run minimal in memory bundle op for Travis CI.)
+
 
 For the latest significant changes please see the [CHANGELOG](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/CHANGELOG.md).
 
