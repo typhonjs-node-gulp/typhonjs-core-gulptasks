@@ -2,6 +2,7 @@
  * Provides Gulp tasks for working with `ESDoc` / `gulp-esdoc`.
  *
  * The following tasks are defined:
+ *
  * `esdoc` - Create docs using `esdoc.json` to define the source and destination locations including support for
  * `esdoc-plugin-jspm`.
  *
@@ -19,8 +20,8 @@ module.exports = function(gulp, options)
    gulp.task('esdoc', function()
    {
       var esdoc = require('gulp-esdoc');
-      var fs = require('fs');
-      var path = require('path');
+      var fs =    require('fs');
+      var path =  require('path');
 
       // The location of the `esdoc.json` configuration file.
       var esdocConfigPath = rootPath + path.sep + 'esdoc.json';
@@ -39,4 +40,6 @@ module.exports = function(gulp, options)
       // Launch ESDoc
       return gulp.src(esdocConfig.source).pipe(esdoc(esdocConfig));
    });
+
+   options.loadedTasks.push('esdoc');
 };

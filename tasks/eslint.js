@@ -2,7 +2,8 @@
  * Provides Gulp tasks for working with ESLint / `gulp-eslint`.
  *
  * The following tasks are defined:
- * `eslint` - Runs ESLint with the given source glob with the `.eslintrc` defined in the root path.
+ *
+ * `eslint` - Runs ESLint with the given source glob with the `.eslintrc` file defined in the root path.
  *
  * @param {Gulp}     gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
@@ -16,7 +17,7 @@ module.exports = function(gulp, options)
    var srcGlob = options.srcGlob;
 
    /**
-    * Runs ESLint with the given source glob with the `.eslintrc` defined in the root path.
+    * Runs ESLint with the given source glob with the `.eslintrc` file defined in the root path.
     */
    gulp.task('eslint', function()
    {
@@ -39,4 +40,6 @@ module.exports = function(gulp, options)
        .pipe(eslint.formatEach('compact', process.stderr))
        .pipe(eslint.failOnError());
    });
+
+   options.loadedTasks.push('eslint');
 };

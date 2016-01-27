@@ -2,8 +2,11 @@
  * Provides Gulp tasks for working with the JSPM CLI and SystemJS Builder.
  *
  * The following tasks are defined:
+ *
  * `jspm-bundle` - Bundles the project via the config file found in `./config/bundle-config.json` or
- * `./config/bundle-config-travis.json` if `--travis` is supplied as an argument to Gulp.
+ * `./config/bundle-config-travis.json` if `--travis` is supplied as an argument to Gulp. Optionally define `configDir`
+ * when loading Gulp tasks to change config directory. Or provide --bundleConfig='path/relative/to/rootpath/bundle.json'
+ * via the CLI to specify a particular config file. Comments are allowed in bundle config json files.
  *
  * `jspm-clear-config` - Removes all `paths` and `map` entries that may be populated in the primary JSPM config file.
  * Performs a git commit if the config file was modified.
@@ -29,6 +32,9 @@ module.exports = function(gulp, options)
 {
    // The root path of the project being operated on via all tasks.
    var rootPath = options.rootPath;
+
+   // A user supplied relative path for config directory or the default of `config`.
+   var configDir = options.configDir;
 
    /**
     * Bundles the project via the config file found in `./config/bundle-config.json` or
@@ -73,11 +79,20 @@ module.exports = function(gulp, options)
       // Set the package path to the local root.
       jspm.setPackagePath(rootPath);
 
+      var bundleInfoPath;
       var promiseList = [];
 
-      // When testing the build in Travis CI we only need to run a single bundle operation.
-      var bundleInfoPath = argv.travis || process.env.TRAVIS ? rootPath + path.sep + 'config' + path.sep
-      + 'bundle-config-travis.json' : rootPath + path.sep + 'config' + path.sep + 'bundle-config.json';
+      // If there is a specific bundleConfig specified then attempt to load it relative to `rootPath`.
+      if (argv.bundleConfig)
+      {
+         bundleInfoPath = rootPath + path.sep + argv.bundleConfig;
+      }
+      else
+      {
+         // When testing the build in Travis CI we only need to run a single bundle operation.
+         bundleInfoPath = argv.travis || process.env.TRAVIS ? rootPath + path.sep + configDir + path.sep
+         + 'bundle-config-travis.json' : rootPath + path.sep + configDir + path.sep + 'bundle-config.json';
+      }
 
       // Strip comments
       var bundleJSON = fs.readFileSync(bundleInfoPath).toString();
@@ -107,6 +122,7 @@ module.exports = function(gulp, options)
             minify: entry.minify
          };
 
+         // Copy any entries from `builderOptions`.
          if (typeof entry.builderOptions === 'object')
          {
             for (var key in entry.builderOptions)
@@ -167,6 +183,8 @@ module.exports = function(gulp, options)
          process.exit(1);
       });
    });
+
+   options.loadedTasks.push('jspm-bundle');
 
    /**
     * Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`. If `config.js` is
@@ -230,16 +248,22 @@ module.exports = function(gulp, options)
          // Rewrite 'config.js'.
          fs.writeFileSync(pjson.configFile, buffer);
 
-         // Execute git commit.
-         exec("git commit -m 'Removed extra data from JSPM config' config.js", { cwd: rootPath },
-          function(err, stdout, stderr)
-          {
-             console.log(stdout);
-             console.log(stderr);
-             cb(err);
-          });
+         // Execute `git commit` and continue silently if this fails.
+         try
+         {
+            exec("git commit -m 'Removed extra data from JSPM config' config.js", { cwd: rootPath },
+             function(err, stdout, stderr)
+             {
+                console.log(stdout);
+                console.log(stderr);
+                cb(err);
+             });
+         }
+         catch (err) { /* ... */ }
       }
    });
+
+   options.loadedTasks.push('jspm-clear-config');
 
    // Only add task if git tasks are also included.
    if (options.importTasks.indexOf('git') >= 0)
@@ -253,6 +277,8 @@ module.exports = function(gulp, options)
          var runSequence = require('run-sequence').use(gulp);
          runSequence('jspm-clear-config', 'git-push', cb);
       });
+
+      options.loadedTasks.push('jspm-clear-config-git-push');
    }
 
    /**
@@ -269,6 +295,8 @@ module.exports = function(gulp, options)
       });
    });
 
+   options.loadedTasks.push('jspm-dl-loader');
+
    /**
     * Runs `jspm inspect` via JSPM CLI.
     */
@@ -283,6 +311,8 @@ module.exports = function(gulp, options)
       });
    });
 
+   options.loadedTasks.push('jspm-inspect');
+
    /**
     * Runs `jspm install` via JSPM CLI.
     */
@@ -296,6 +326,8 @@ module.exports = function(gulp, options)
          cb(err);
       });
    });
+
+   options.loadedTasks.push('jspm-install');
 };
 
 /**
@@ -350,16 +382,15 @@ function builderBundle(jspm, buildType, inMemoryBuild, srcFilename, destDir, des
       }
 
       var builderOptionsString = JSON.stringify(builderOptions);
-      var builderOptionsFormat = builderOptions.format;
 
       if (inMemoryBuild)
       {
-         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + builderOptionsFormat
+         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + builderOptions.format
           + '; builderOptions: ' + builderOptionsString);
       }
       else
       {
-         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + builderOptionsFormat
+         console.log('Bundle queued - srcFilename: ' + srcFilename + '; format: ' + builderOptions.format
           + '; builderOptions: ' + builderOptionsString + '; destDir: ' + destDir + '; destFilepath: ' + destFilepath);
       }
 
@@ -379,12 +410,12 @@ function builderBundle(jspm, buildType, inMemoryBuild, srcFilename, destDir, des
       {
          if (inMemoryBuild)
          {
-            console.log('Bundle complete - format: ' + builderOptionsFormat + '; builderOptions: '
+            console.log('Bundle complete - format: ' + builderOptions.format + '; builderOptions: '
              + builderOptionsString);
          }
          else
          {
-            console.log('Bundle complete - format: ' + builderOptionsFormat + '; filename: ' + destFilepath
+            console.log('Bundle complete - format: ' + builderOptions.format + '; filename: ' + destFilepath
              + '; builderOptions: ' + builderOptionsString);
          }
 
@@ -394,12 +425,12 @@ function builderBundle(jspm, buildType, inMemoryBuild, srcFilename, destDir, des
       {
          if (inMemoryBuild)
          {
-            console.error('Bundle error - format: ' + builderOptionsFormat + '; builderOptions: '
+            console.error('Bundle error - format: ' + builderOptions.format + '; builderOptions: '
              + builderOptionsString);
          }
          else
          {
-            console.error('Bundle error - format: ' + builderOptionsFormat + '; filename: ' + destFilepath
+            console.error('Bundle error - format: ' + builderOptions.format + '; filename: ' + destFilepath
              + '; builderOptions: ' + builderOptionsString);
          }
 

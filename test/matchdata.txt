@@ -15,6 +15,7 @@ Sub Tasks
     jspm-install
     local-test
     npm-install
+    npm-list-depth-0
     npm-outdated
     npm-run-test-script
     npm-uninstall

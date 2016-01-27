@@ -2,8 +2,6 @@
  * Provides Gulp tasks for working with Git.
  *
  * The following tasks are defined:
- * `git-push-clear-config` - Verifies the build by running test-basic and on success clears JSPM config.js of `map` &
- * `paths` entries performing a `git commit` as necessary before executing `git push`.
  *
  * `git-push` - Verifies the build by running `test-basic` and on success executes `git push`.
  *
@@ -34,4 +32,6 @@ module.exports = function(gulp, options)
          cb(err);
       });
    });
+
+   options.loadedTasks.push('git-push');
 };
