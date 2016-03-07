@@ -1,15 +1,15 @@
 {
    "name": "typhonjs-core-gulptasks",
-   "version": "0.5.0",
-   "homepage": "https://github.com/typhonjs/typhonjs-core-gulptasks/",
+   "version": "0.5.1",
+   "homepage": "https://github.com/typhonjs-node-gulp/typhonjs-core-gulptasks/",
    "description": "Provides common gulp tasks shared by TyphonJS and beyond for JSPM / SystemJS projects.",
-   "license": "MIT",
+   "license": "MPL-2.0",
    "author": {
       "name": "Mike Leahy"
    },
    "repository": {
       "type": "git",
-      "url": "https://github.com/typhonjs/typhonjs-core-gulptasks/typhonjs-core-gulptasks.git"
+      "url": "https://github.com/typhonjs-node-gulp/typhonjs-core-gulptasks/typhonjs-core-gulptasks.git"
    },
    "maintainers": [
       {
@@ -18,29 +18,26 @@
       }
    ],
    "dependencies": {
-      "bluebird": "^3.1.5",
-      "esdoc-es7-plugin": "^0.0.3",
-      "esdoc-importpath-plugin": "^0.0.1",
-      "esdoc-plugin-extends-replace": "^0.4.0",
-      "esdoc-plugin-jspm": "^0.6.0",
-      "fs-extra": "^0.26.5",
-      "gulp": "^3.9.0",
-      "gulp-esdoc": "^0.2.0",
-      "gulp-eslint": "^1.1.1",
-      "jspm": "^0.16.25",
-      "run-sequence": "^1.1.5",
+      "fs-extra": "^0.26.0",
+      "run-sequence": "^1.0.0",
       "strip-json-comments": "^2.0.0",
-      "yargs": "^3.32.0"
+      "yargs": "^3.0.0"
    },
    "devDependencies": {
-      "gulp-task-listing": "^1.0.1",
-      "typhonjs-config-eslint": "^0.2.1"
+      "gulp": "^3.0.0",
+      "gulp-task-listing": "^1.0.0",
+      "typhonjs-config-eslint": "^0.4.0",
+      "typhonjs-npm-build-test": "^0.0.10"
    },
-   "main": "index.js",
+   "main": "dist/index.js",
+   "engines" : {
+      "npm" : ">=3.x"
+   },
    "scripts": {
-      "test-script": ""
+      "build": "babel-node ./node_modules/typhonjs-npm-scripts-build-babel/scripts/build.js"
    },
    "keywords": [
+      "electron",
       "esdoc",
       "eslint",
       "gulp",
@@ -50,11 +47,11 @@
       "typhonjs"
    ],
    "files": [
-      "tasks",
-      "index.js"
+      "dist",
+      "src"
    ],
    "directories": {},
    "bugs": {
-      "url": "https://github.com/typhonjs/typhonjs-core-gulptasks/issues"
+      "url": "https://github.com/typhonjs-node-gulp/typhonjs-core-gulptasks/issues"
    }
 }

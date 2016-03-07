@@ -6,7 +6,7 @@
 var gulp = require('gulp');
 
 // require all tasks
-require('./index.js')(gulp, { rootPath: __dirname, srcGlob: ['index.js', './tasks/**/*.js'] });
+require('./src/index.js')(gulp, { rootPath: __dirname, srcGlob: ['./src/index.js', './src/tasks/**/*.js'] });
 
 /**
  * Generates task listing
