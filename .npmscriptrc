@@ -1,0 +1,24 @@
+/**
+ * You can provide comments in `.npmscriptrc`
+ */
+{
+   "build":
+   {
+      "babel": { "source": "src", "destination": "dist" }
+   },
+
+   "publish":
+   {
+      "prepublish":
+      {
+         "scripts":
+         [
+            "gulp eslint",
+            "npm run build",
+            "gulp local-test --silent > './test/testdata.txt'",
+            "gulp verify-test",
+            "rm ./test/testdata.txt"
+         ]
+      }
+   }
+}
