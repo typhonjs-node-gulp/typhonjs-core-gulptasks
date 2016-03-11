@@ -1,6 +1,8 @@
 ## 0.6.0 (2016-03-11)
 - Converted to ES6.
 
+- NPM 3+ / Node 5+ is the recommended environment to use due to flat package dependencies.
+
 - Removed dependencies for esdoc, eslint and jspm.
 
 - Tasks now require dependencies for esdoc, eslint and jspm to be included separately for tasks to be loaded.
