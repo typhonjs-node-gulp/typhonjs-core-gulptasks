@@ -1,3 +1,18 @@
+## 0.6.0 (2016-03-11)
+- Converted to ES6.
+
+- Removed dependencies for esdoc, eslint and jspm.
+
+- Tasks now require dependencies for esdoc, eslint and jspm to be included separately for tasks to be loaded.
+
+- `esdoc` task will load `.esdocrc` or `esdoc.json`; TyphonJS now standardizes on `.esdocrc`. 
+
+- `electron` task requires `.electronrc` instead of `electron.json` configuration file to load. 
+
+- `test` category has been removed and `test-basic` is now `jspm-test-basic`.
+
+- Added `npm-update` and `npm-update-dev` for devDependencies.
+
 ## 0.5.0 (2016-01-27)
 - Added support for [Electron](http://electron.atom.io/) with tasks `electron-package-<platform>-<arch>`, `electron-start` and `electron-start-debug` tasks. For these tasks to appear you must include `electron-packager` and `electron-prebuilt` NPM modules in `devDependencies` in `package.json`. You must also supply in the root path `electron.json` which provides any [options available for packaging apps](https://www.npmjs.com/package/electron-packager#programmatic-api). Default values are provided for `platform` -> 'process.platform', `arch` -> 'process.arch', `source` -> '.' and `out` -> 'build' if not supplied. You may include comments in `electron.json`. Please see [electron-backbone-es6-localstorage-todos](https://github.com/typhonjs-demos/backbone-es6-localstorage-todos) for an example.
 

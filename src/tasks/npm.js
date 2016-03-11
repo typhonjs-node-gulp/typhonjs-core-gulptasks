@@ -17,6 +17,10 @@ import path from 'path';
  *
  * `npm-uninstall` - Runs `npm uninstall <package>` via NPM CLI for all node modules installed.
  *
+ * `npm-update` - Runs `npm update` via NPM CLI.
+ *
+ * `npm-update-dev` - Runs `npm update --dev` via NPM CLI.
+ *
  * @param {object}   gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
@@ -115,4 +119,34 @@ export default function(gulp, options)
    });
 
    options.loadedTasks.push('npm-uninstall');
+
+   /**
+    * Runs `npm update` via NPM CLI.
+    */
+   gulp.task('npm-update', (cb) =>
+   {
+      cp.exec('npm update', { cwd: rootPath }, (err, stdout, stderr) =>
+      {
+         console.log(stdout);
+         console.log(stderr);
+         cb(err);
+      });
+   });
+
+   options.loadedTasks.push('npm-update');
+
+   /**
+    * Runs `npm update --dev` via NPM CLI.
+    */
+   gulp.task('npm-update-dev', (cb) =>
+   {
+      cp.exec('npm update --dev', { cwd: rootPath }, (err, stdout, stderr) =>
+      {
+         console.log(stdout);
+         console.log(stderr);
+         cb(err);
+      });
+   });
+
+   options.loadedTasks.push('npm-update-dev');
 }
