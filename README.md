@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat)](https://github.com/typhonjs/typhonjs-core-gulptasks/blob/master/LICENSE)
 [![Gitter](https://img.shields.io/gitter/room/typhonjs/TyphonJS.svg)](https://gitter.im/typhonjs/TyphonJS)
 
-[![Build Status](https://travis-ci.org/typhonjs/typhonjs-core-gulptasks.svg?branch=master)](https://travis-ci.org/typhonjs/typhonjs-core-gulptasks)
+[![Build Status](https://travis-ci.org/typhonjs-node-gulp/typhonjs-core-gulptasks.svg?branch=master)](https://travis-ci.org/typhonjs-node-gulp/typhonjs-core-gulptasks)
 [![Dependency Status](https://www.versioneye.com/user/projects/563b3b1c1d47d40015000a91/badge.svg?style=flat)](https://www.versioneye.com/user/projects/563b3b1c1d47d40015000a91)
 
 Provides common shared [Gulp](http://gulpjs.com/) tasks for [TyphonJS](https://github.com/typhonjs) and beyond for those using [JSPM](http://jspm.io) / [SystemJS](https://github.com/systemjs/systemjs). By packaging all common Gulp tasks as a NPM package this fascilitates sharing the tasks across several projects / repos having one authoritative and versioned source for these tasks and all dependencies. Various JSPM & NPM CLI functions are wrapped as tasks allowing execution from IDEs which support Gulp. 
