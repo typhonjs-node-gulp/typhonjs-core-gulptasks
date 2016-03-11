@@ -13,11 +13,12 @@ import tasksNPMScripts  from './tasks/npm-scripts.js';
  * Requires all Gulp tasks.
  *
  * Required parameters include:
- * `rootPath` - the root path where `package.json` is located for the given project.
- * `srcGlob` - the source glob that certain tasks like `eslint` use to associate the source for the given project.
+ * `rootPath` - The root path where `package.json` is located for the given project.
+ * `srcGlob` - The source glob that certain tasks like `eslint` use to associate the source for the given project.
  *
  * Additional optional parameters include:
- * `configDir` - the directory where configuration files for various tasks such as `jspm-bundle` are stored.
+ * `configDir` - The directory where configuration files for various tasks such as `jspm-bundle` are stored; default
+ * (`./config`).
  *
  * `importTasks` - An array of strings which specifies which categories of tasks to load. This allows only exposing
  * certain tasks that are relevant for a given project. For instance several TyphonJS Node packages only use `eslint`
