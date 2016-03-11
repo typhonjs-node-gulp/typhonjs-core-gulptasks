@@ -212,7 +212,7 @@ export default function(gulp, options)
    {
       const jspm =            require('jspm');
 
-      const PackageConfig =   require('jspm/lib/config/package.js');
+      const PackageConfig =   require(`jspm${path.sep}lib${path.sep}config${path.sep}package.js`);
 
       // Set the package path to the local root.
       jspm.setPackagePath(rootPath);
