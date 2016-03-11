@@ -13,6 +13,10 @@
 
 - `test` category has been removed and `test-basic` is now `jspm-test-basic`.
 
+- `git` category has been removed and `git-push` is now `jspm-test-basic-git-push`.
+
+- Removed `jspm-clear-config-git-push` task.
+
 - Added `npm-update` and `npm-update-dev` for devDependencies.
 
 ## 0.5.0 (2016-01-27)

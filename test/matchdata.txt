@@ -6,14 +6,13 @@ Main Tasks
 
 Sub Tasks
 ------------------------------
-    git-push
     jspm-bundle
     jspm-clear-config
-    jspm-clear-config-git-push
     jspm-dl-loader
     jspm-inspect
     jspm-install
     jspm-test-basic
+    jspm-test-basic-git-push
     local-test
     npm-install
     npm-list-depth-0

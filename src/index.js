@@ -4,7 +4,6 @@ import os            from 'os';
 import tasksElectron from './tasks/electron.js';
 import tasksESDoc    from './tasks/esdoc.js';
 import tasksESLint   from './tasks/eslint.js';
-import tasksGit      from './tasks/git.js';
 import tasksJSPM     from './tasks/jspm.js';
 import tasksNPM      from './tasks/npm.js';
 
@@ -115,10 +114,6 @@ const s_REQUIRE_TASKS = (gulp, options) =>
 
          case 'eslint':
             tasksESLint(gulp, options);
-            break;
-
-         case 'git':
-            tasksGit(gulp, options);
             break;
 
          case 'jspm':

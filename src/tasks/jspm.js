@@ -31,6 +31,9 @@ import vm                  from 'vm';
  * `jspm-test-basic` - Runs tasks `eslint` and `jspm-bundle` in memory build. Useful for basic testing and Travis CI for
  * JSPM projects. If `eslint` task is not available then this task is hidden.
  *
+ * `jspm-test-basic-git-push` - Runs `git push` via CLI, but only if the task `jspm-test-basic`
+ * (`eslint` & `jspm-bundle`) completes successfully.
+ *
  * @param {object}   gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
@@ -282,22 +285,6 @@ export default function(gulp, options)
 
    options.loadedTasks.push('jspm-clear-config');
 
-   // Only add task if git tasks are also included.
-   if (options.importTasks.indexOf('git') >= 0)
-   {
-      /**
-       * Removes all `paths` and `map` entries that may be populated in the primary / root `config.js`. If `config.js`
-       * is modified a git commit for `config.js` is performed. A git push is then executed.
-       */
-      gulp.task('jspm-clear-config-git-push', ['test-basic'], (cb) =>
-      {
-         const runSequenceLocal = runSequence.use(gulp);
-         runSequenceLocal('jspm-clear-config', 'git-push', cb);
-      });
-
-      options.loadedTasks.push('jspm-clear-config-git-push');
-   }
-
    /**
     * Runs `jspm dl-loader` via JSPM CLI.
     */
@@ -360,6 +347,27 @@ export default function(gulp, options)
       });
 
       options.loadedTasks.push('jspm-test-basic');
+
+
+      if (options.importTasks.indexOf('git') >= 0)
+      {
+         /**
+          * Runs "git push", but only if the test task `jspm-test-basic` (`eslint` & `jspm-bundle`) complete
+          * successfully.
+          */
+         gulp.task('jspm-test-basic-git-push', ['jspm-test-basic'], (cb) =>
+         {
+            // Execute git push.
+            exec('git push', { cwd: rootPath }, (err, stdout, stderr) =>
+            {
+               console.log(stdout);
+               console.log(stderr);
+               cb(err);
+            });
+         });
+
+         options.loadedTasks.push('jspm-git-push');
+      }
    }
 }
 
