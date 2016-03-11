@@ -19,6 +19,9 @@ Sub Tasks
     npm-list-depth-0
     npm-outdated
     npm-run-build
+    npm-run-prepublish
     npm-uninstall
+    npm-update
+    npm-update-dev
     verify-test
 
