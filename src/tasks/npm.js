@@ -1,3 +1,7 @@
+import cp   from 'child_process';
+import fs   from 'fs-extra';
+import path from 'path';
+
 /**
  * Provides Gulp tasks for working with the NPM CLI.
  *
@@ -13,23 +17,19 @@
  *
  * `npm-uninstall` - Runs `npm uninstall <package>` via NPM CLI for all node modules installed.
  *
- * @param {Gulp}     gulp     - An instance of Gulp.
+ * @param {object}   gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
-module.exports = function(gulp, options)
+export default function(gulp, options)
 {
-   var path =     require('path');
-   var fs =       require('fs-extra');
-
-   var rootPath = options.rootPath;
+   const rootPath = options.rootPath;
 
    /**
     * Runs `npm install` via NPM CLI.
     */
-   gulp.task('npm-install', function(cb)
+   gulp.task('npm-install', (cb) =>
    {
-      var exec = require('child_process').exec;
-      exec('npm install', { cwd: rootPath }, function(err, stdout, stderr)
+      cp.exec('npm install', { cwd: rootPath }, (err, stdout, stderr) =>
       {
          console.log(stdout);
          console.log(stderr);
@@ -42,10 +42,9 @@ module.exports = function(gulp, options)
    /**
     * Runs `npm list --depth=0` via NPM CLI.
     */
-   gulp.task('npm-list-depth-0', function(cb)
+   gulp.task('npm-list-depth-0', (cb) =>
    {
-      var exec = require('child_process').exec;
-      exec('npm list --depth=0', { cwd: rootPath }, function(err, stdout, stderr)
+      cp.exec('npm list --depth=0', { cwd: rootPath }, (err, stdout, stderr) =>
       {
          console.log(stdout);
          console.log(stderr);
@@ -58,10 +57,9 @@ module.exports = function(gulp, options)
    /**
     * Runs `npm outdated` via NPM CLI.
     */
-   gulp.task('npm-outdated', function(cb)
+   gulp.task('npm-outdated', (cb) =>
    {
-      var exec = require('child_process').exec;
-      exec('npm outdated', { cwd: rootPath }, function(err, stdout, stderr)
+      cp.exec('npm outdated', { cwd: rootPath }, (err, stdout, stderr) =>
       {
          console.log(stdout);
          console.log(stderr);
@@ -73,24 +71,23 @@ module.exports = function(gulp, options)
 
    // Load any package.json in `rootPath` and add Gulp tasks to invoke any script entries.
 
-   var packageJSONPath = rootPath + path.sep + 'package.json';
+   const packageJSONPath = `${rootPath}${path.sep}package.json`;
 
    if (fs.existsSync(packageJSONPath))
    {
-      var packageJSON = require(packageJSONPath);
+      const packageJSON = require(packageJSONPath);
 
       // If a scripts entry exists then create Gulp tasks to invoke them.
       if (typeof packageJSON.scripts === 'object')
       {
-         Object.keys(packageJSON.scripts).forEach(function(element)
+         Object.keys(packageJSON.scripts).forEach((element) =>
          {
             /**
              * Runs `npm run <script name>` via NPM CLI.
              */
-            gulp.task('npm-run-' + element, function(cb)
+            gulp.task(`npm-run-${element}`, (cb) =>
             {
-               var exec = require('child_process').exec;
-               exec('npm run ' + element, { cwd: rootPath }, function(err, stdout, stderr)
+               cp.exec(`npm run ${element}`, { cwd: rootPath }, (err, stdout, stderr) =>
                {
                   console.log(stdout);
                   console.log(stderr);
@@ -98,7 +95,7 @@ module.exports = function(gulp, options)
                });
             });
 
-            options.loadedTasks.push('npm-run-' + element);
+            options.loadedTasks.push(`npm-run-${element}`);
          });
       }
    }
@@ -106,11 +103,10 @@ module.exports = function(gulp, options)
    /**
     * Runs `npm uninstall <package>` via NPM CLI for all node modules installed.
     */
-   gulp.task('npm-uninstall', function(cb)
+   gulp.task('npm-uninstall', (cb) =>
    {
-      var exec = require('child_process').exec;
-      exec('for package in `ls node_modules`; do npm uninstall $package; done;', { cwd: rootPath },
-       function(err, stdout, stderr)
+      cp.exec('for package in `ls node_modules`; do npm uninstall $package; done;', { cwd: rootPath },
+       (err, stdout, stderr) =>
       {
          console.log(stdout);
          console.log(stderr);
@@ -119,4 +115,4 @@ module.exports = function(gulp, options)
    });
 
    options.loadedTasks.push('npm-uninstall');
-};
+}

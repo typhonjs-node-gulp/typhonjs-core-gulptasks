@@ -1,11 +1,16 @@
+import cp                  from 'child_process';
+import fs                  from 'fs-extra';
+import path                from 'path';
+import stripJsonComments   from 'strip-json-comments';
+
 /**
  * Provides Gulp tasks for working with Electron.
  *
  * The following tasks are defined:
  *
- * `electron-package-<platform>-<arch>` - Invokes "electron-packager" with the options from `electron.json` in the root
+ * `electron-package-<platform>-<arch>` - Invokes "electron-packager" with the options from `.electronrc` in the root
  * path. Default values are provided for `platform` -> 'process.platform', `arch` -> 'process.arch', `source` -> '.' and
- * `out` -> 'build' if not supplied. For options to provide in `electron.json` please see:
+ * `out` -> 'build' if not supplied. For options to provide in `.electronrc` please see:
  * https://www.npmjs.com/package/electron-packager#programmatic-api
  *
  * `electron-start` - Spawns `electron .` starting the app defined in `package.json->main` entry in the root path.
@@ -19,15 +24,15 @@
  * Please see electron-backbone-es6-localstorage-todos for a complete example:
  * https://github.com/typhonjs-demos/backbone-es6-localstorage-todos
  *
- * @param {Gulp}     gulp     - An instance of Gulp.
+ * @param {object}   gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
-module.exports = function(gulp, options)
+export default function(gulp, options)
 {
    // The root path of the project being operated on via all tasks.
-   var rootPath = options.rootPath;
+   const rootPath = options.rootPath;
 
-   var electronPackager, electronPrebuilt;
+   let electronPackager, electronPrebuilt;
 
    try
    {
@@ -49,17 +54,17 @@ module.exports = function(gulp, options)
       /**
        * Spawns `electron .` starting the app defined in `package.json->main` entry in the root path.
        */
-      gulp.task('electron-start', function()
+      gulp.task('electron-start', () =>
       {
-         require('child_process').spawn(electronPrebuilt, ['.'], { cwd: rootPath });
+         cp.spawn(electronPrebuilt, ['.'], { cwd: rootPath });
       });
 
       /**
        * Spawns `electron --debug=5858 .` starting the app defined in `package.json->main` entry in the root path.
        */
-      gulp.task('electron-start-debug', function()
+      gulp.task('electron-start-debug', () =>
       {
-         require('child_process').spawn(electronPrebuilt, ['--debug=5858', '.'], { cwd: rootPath });
+         cp.spawn(electronPrebuilt, ['--debug=5858', '.'], { cwd: rootPath });
       });
 
       options.loadedTasks.push('electron-start');
@@ -68,76 +73,76 @@ module.exports = function(gulp, options)
 
    /**
     * Only add electron-package task if NPM modules `electron-packager` and `electron-prebuilt` is installed in addition
-    * to `electron.json` configuration file located in the root path.
+    * to `.electronrc` configuration file located in the root path.
     */
    if (electronPackager && electronPrebuilt)
    {
-      var fs =                require('fs-extra');
-      var path =              require('path');
-      var stripJsonComments = require('strip-json-comments');
+      const electronInfoPath = `${rootPath}${path.sep}.electronrc`;
 
-      var electronInfoPath = rootPath + path.sep + 'electron.json';
-
-      if (fs.existsSync(electronInfoPath))
+      try
       {
-         // Strip comments & attempt to load
-         var electronJSON = fs.readFileSync(electronInfoPath).toString();
-         var electronInfo = JSON.parse(stripJsonComments(electronJSON));
-
-         // Automatically set `arch` and `platform` to `all` if true.
-         if (typeof electronInfo.all === 'boolean' && electronInfo.all)
+         if (fs.statSync(electronInfoPath).isFile())
          {
-            electronInfo.arch = 'all';
-            electronInfo.platform = 'all';
-         }
+            // Strip comments & attempt to load
+            const electronJSON = fs.readFileSync(electronInfoPath, 'utf-8');
+            const electronInfo = JSON.parse(stripJsonComments(electronJSON));
 
-         // If `platform` is missing provide a default value: `process.platform`.
-         if (typeof electronInfo.platform !== 'string')
-         {
-            electronInfo.platform = process.platform;
-         }
-
-         // If `arch` is missing provide a default value: `process.arch`.
-         if (typeof electronInfo.arch !== 'string')
-         {
-            electronInfo.arch = process.arch;
-         }
-
-         // If `dir` is missing provide a default value: `.`.
-         if (typeof electronInfo.source !== 'string')
-         {
-            electronInfo.dir = '.';
-         }
-
-         // If `out` is missing provide a default value: `build`.
-         if (typeof electronInfo.out !== 'string')
-         {
-            electronInfo.out = 'build';
-         }
-
-         if (electronInfo.all || (electronInfo.platform && electronInfo.arch))
-         {
-            var taskName = 'electron-package-' + electronInfo.platform + '-' + electronInfo.arch;
-
-            /**
-             * Invokes "electron-packager" with the options from `electron.json` in the root path. Default values are
-             * provided for `platform` -> 'process.platform', `arch` -> 'process.arch', `source` -> '.' and
-             * `out` -> 'build' if not supplied.
-             *
-             * For options to provide in `electron.json` please see:
-             * https://www.npmjs.com/package/electron-packager#programmatic-api
-             */
-            gulp.task(taskName, function(cb)
+            // Automatically set `arch` and `platform` to `all` if true.
+            if (typeof electronInfo.all === 'boolean' && electronInfo.all)
             {
-               electronPackager(electronInfo, function(err, appPath)
-               {
-                  console.log('Packaging app complete: ' + appPath);
-                  cb(err);
-               });
-            });
+               electronInfo.arch = 'all';
+               electronInfo.platform = 'all';
+            }
 
-            options.loadedTasks.push(taskName);
+            // If `platform` is missing provide a default value: `process.platform`.
+            if (typeof electronInfo.platform !== 'string')
+            {
+               electronInfo.platform = process.platform;
+            }
+
+            // If `arch` is missing provide a default value: `process.arch`.
+            if (typeof electronInfo.arch !== 'string')
+            {
+               electronInfo.arch = process.arch;
+            }
+
+            // If `dir` is missing provide a default value: `.`.
+            if (typeof electronInfo.source !== 'string')
+            {
+               electronInfo.dir = '.';
+            }
+
+            // If `out` is missing provide a default value: `build`.
+            if (typeof electronInfo.out !== 'string')
+            {
+               electronInfo.out = 'build';
+            }
+
+            if (electronInfo.all || (electronInfo.platform && electronInfo.arch))
+            {
+               const taskName = `electron-package-${electronInfo.platform}-${electronInfo.arch}`;
+
+               /**
+                * Invokes "electron-packager" with the options from `.electronrc` in the root path. Default values are
+                * provided for `platform` -> 'process.platform', `arch` -> 'process.arch', `source` -> '.' and
+                * `out` -> 'build' if not supplied.
+                *
+                * For options to provide in `.electronrc` please see:
+                * https://www.npmjs.com/package/electron-packager#programmatic-api
+                */
+               gulp.task(taskName, (cb) =>
+               {
+                  electronPackager(electronInfo, (err, appPath) =>
+                  {
+                     console.log(`Packaging app complete: ${appPath}`);
+                     cb(err);
+                  });
+               });
+
+               options.loadedTasks.push(taskName);
+            }
          }
       }
+      catch (err) { /* ... */ }
    }
-};
+}

@@ -3,29 +3,35 @@
  * Please see https://www.npmjs.com/package/typhonjs-core-gulptasks
  */
 
-var gulp = require('gulp');
+import fs            from 'fs';
+import gulp          from 'gulp';
+
+import gulpTasks     from './src/index.js';
+
+import taskListing   from 'gulp-task-listing';
 
 // require all tasks
-require('./src/index.js')(gulp, { rootPath: __dirname, srcGlob: ['./src/index.js', './src/tasks/**/*.js'] });
+gulpTasks(gulp,
+{
+   rootPath: __dirname,
+   srcGlob: ['./src/index.js', './src/tasks/**/*.js']
+});
 
 /**
  * Generates task listing
  */
-gulp.task('local-test', function()
+gulp.task('local-test', () =>
 {
-   var taskListing = require('gulp-task-listing');
    taskListing.withFilters(null, ['local-test', 'verify-test'])();
 });
 
 /**
  * Verifies task listing data
  */
-gulp.task('verify-test', function()
+gulp.task('verify-test', () =>
 {
-   var fs = require('fs');
-
-   var testData = fs.readFileSync('./test/testdata.txt', 'utf8');
-   var matchData = fs.readFileSync('./test/matchdata.txt', 'utf8');
+   const testData = fs.readFileSync('./test/testdata.txt', 'utf8');
+   const matchData = fs.readFileSync('./test/matchdata.txt', 'utf8');
 
    if (matchData !== testData)
    {

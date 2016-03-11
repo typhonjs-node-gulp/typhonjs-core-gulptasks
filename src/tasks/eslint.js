@@ -1,45 +1,55 @@
+import fs   from 'fs-extra';
+import path from 'path';
+
 /**
- * Provides Gulp tasks for working with ESLint / `gulp-eslint`.
+ * Provides Gulp tasks for working with ESLint.
  *
  * The following tasks are defined:
  *
  * `eslint` - Runs ESLint with the given source glob with the `.eslintrc` file defined in the root path.
  *
- * @param {Gulp}     gulp     - An instance of Gulp.
+ * @param {object}   gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
-module.exports = function(gulp, options)
+export default function(gulp, options)
 {
    // The root path of the project being operated on via all tasks.
-   var rootPath = options.rootPath;
+   const rootPath = options.rootPath;
 
    // The source glob defining all sources.
-   var srcGlob = options.srcGlob;
+   const srcGlob = options.srcGlob;
 
-   /**
-    * Runs ESLint with the given source glob with the `.eslintrc` file defined in the root path.
-    */
-   gulp.task('eslint', function()
+   try
    {
-      var eslint = require('gulp-eslint');
-      var fs = require('fs');
-      var path = require('path');
+      // Require is used here to avoid ES6 hoisted imports.
+      const CLIEngine = require('eslint').CLIEngine;
+      const cli = new CLIEngine();
 
-      // The location of the `.eslintrc` configuration file.
-      var eslintConfigPath = rootPath + path.sep + '.eslintrc';
-
-      if (!fs.existsSync(eslintConfigPath))
+      if (fs.statSync(`${rootPath}${path.sep}.eslintrc`).isFile())
       {
-         console.error('Could not locate `.eslintrc` at: ' + eslintConfigPath);
-         process.exit(1);
+         /**
+          * Runs ESLint with the given source glob with the `.eslintrc` file defined in the root path.
+          */
+         gulp.task('eslint', () =>
+         {
+            if (!Array.isArray(srcGlob))
+            {
+               console.log(`eslint task error: 'options.srcGlob' is not an 'array'.`);
+               process.exit(1);
+            }
+
+            const report = cli.executeOnFiles(srcGlob);
+
+            const formatter = cli.getFormatter();
+
+            console.log(formatter(report.results));
+
+            // Exit on errors.
+            if (report.errorCount > 0) { process.exit(1); }
+         });
+
+         options.loadedTasks.push('eslint');
       }
-
-      // Run ESLint
-      return gulp.src(srcGlob)
-       .pipe(eslint(eslintConfigPath))
-       .pipe(eslint.formatEach('compact', process.stderr))
-       .pipe(eslint.failOnError());
-   });
-
-   options.loadedTasks.push('eslint');
-};
+   }
+   catch (err) { /* ... */ }
+}

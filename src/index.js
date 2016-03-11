@@ -1,3 +1,13 @@
+import cp            from 'child_process';
+import os            from 'os';
+
+import tasksElectron from './tasks/electron.js';
+import tasksESDoc    from './tasks/esdoc.js';
+import tasksESLint   from './tasks/eslint.js';
+import tasksGit      from './tasks/git.js';
+import tasksJSPM     from './tasks/jspm.js';
+import tasksNPM      from './tasks/npm.js';
+
 /**
  * Requires all Gulp tasks.
  *
@@ -10,106 +20,114 @@
  *
  * `importTasks` -  may be supplied which specifies which categories of tasks to require. This allows only exposing
  * certain tasks that are relevant for a given project. For instance several TyphonJS Node packages only use `eslint`
- * and `npm`. Available task categories include: 'electron', 'esdoc', 'eslint', 'git', 'jspm', 'npm' and 'test'.
+ * and `npm`. Available task categories include: 'electron', 'esdoc', 'eslint', 'git', 'jspm' and 'npm'.
+ *
+ * It should be noted that `typhonjs-core-gulptasks` does not include dependencies for ESDoc, ESLint or JSPM. If
+ * these dependencies are missing from `package.json` / `node_modules` then the associated Gulp tasks for each do not
+ * load.
  *
  * Regarding the `Electron` tasks; these are the only tasks that require `electron-packager` and `electron-prebuilt`
- * NPM modules to be installed along with an `electron.json` configuration file in rootPath to load these tasks
+ * NPM modules to be installed along with a `.electronrc` configuration file in rootPath to load these tasks
  * otherwise they stay hidden.
  *
- * @param {Gulp}     gulp     - An instance of Gulp.
+ * @param {object}   gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
-module.exports = function(gulp, options)
+export default function(gulp, options)
 {
    options =                  options || {};
    options.configDir =        options.configDir || 'config';
-   options.importTasks =      options.importTasks || ['electron', 'esdoc', 'eslint', 'git', 'jspm', 'npm', 'test'];
+   options.importTasks =      options.importTasks || ['electron', 'esdoc', 'eslint', 'git', 'jspm', 'npm'];
 
    options.loadedTasks =      [];   // Stores loaded task names.
    options.topLevelModules =  {};   // Stores top level module info.
 
-   var rootPath =             options.rootPath;
-
-   var childProcess =         require('child_process');
-   var os =                   require('os');
+   const rootPath =           options.rootPath;
 
    // Remove git task from options.importTasks if error is raised when invoking `git --version` via CLI.
    try
    {
-      childProcess.execSync('git --version', { cwd: rootPath, encoding: 'utf8' });
+      cp.execSync('git --version', { cwd: rootPath, encoding: 'utf8' });
    }
    catch (err)
    {
-      var gitIndex = options.importTasks.indexOf('git');
+      const gitIndex = options.importTasks.indexOf('git');
       if (gitIndex >= 0) { options.importTasks.splice(gitIndex, 1); }
+   }
+
+   // Remove npm tasks from options.importTasks if error is raised when invoking `npm version` via CLI.
+   try
+   {
+      cp.execSync('npm version', { cwd: rootPath, encoding: 'utf8' });
+   }
+   catch (err)
+   {
+      const npmIndex = options.importTasks.indexOf('npm');
+      if (npmIndex >= 0) { options.importTasks.splice(npmIndex, 1); }
    }
 
    // Parses top level modules installed in `node_modules` and provides an object hash of name -> version in
    // `options.topLevelModules`.
 
-   var moduleList;
+   let moduleList;
 
    try
    {
-      moduleList = childProcess.execSync('npm list --depth=0', { cwd: rootPath, encoding: 'utf8' });
+      moduleList = cp.execSync('npm list --depth=0', { cwd: rootPath, encoding: 'utf8' });
    }
    catch (err) { /* ... */ }
 
    if (moduleList)
    {
-      var lines = moduleList.split(os.EOL);
-      var regex = /([\S]+)@([\S]+)/;
+      const lines = moduleList.split(os.EOL);
+      const regex = /([\S]+)@([\S]+)/;
 
-      for (var cntr = 1; cntr < lines.length; cntr++)
+      for (let cntr = 1; cntr < lines.length; cntr++)
       {
-         var results = regex.exec(lines[cntr]);
+         const results = regex.exec(lines[cntr]);
          if (results && results.length >= 3) { options.topLevelModules[results[1]] = results[2]; }
       }
    }
 
    // Require all tasks
-   requireTasks(gulp, options);
-};
+   s_REQUIRE_TASKS(gulp, options);
+}
 
 /**
  * Dispatches and requires tasks defined in `options.importTasks`.
  *
- * @param {Gulp}     gulp     - An instance of Gulp.
+ * @param {object}   gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
  */
-function requireTasks(gulp, options)
+const s_REQUIRE_TASKS = (gulp, options) =>
 {
-   for (var cntr = 0; cntr < options.importTasks.length; cntr++)
+   for (let cntr = 0; cntr < options.importTasks.length; cntr++)
    {
       switch (options.importTasks[cntr])
       {
          case 'electron':
-            require('./tasks/electron.js')(gulp, options);
+            tasksElectron(gulp, options);
             break;
 
          case 'esdoc':
-            require('./tasks/esdoc.js')(gulp, options);
+            tasksESDoc(gulp, options);
             break;
 
          case 'eslint':
-            require('./tasks/eslint.js')(gulp, options);
+            tasksESLint(gulp, options);
             break;
 
          case 'git':
-            require('./tasks/git.js')(gulp, options);
+            tasksGit(gulp, options);
             break;
 
          case 'jspm':
-            require('./tasks/jspm.js')(gulp, options);
+            tasksJSPM(gulp, options);
             break;
 
          case 'npm':
-            require('./tasks/npm.js')(gulp, options);
-            break;
-
-         case 'test':
-            require('./tasks/test.js')(gulp, options);
+            tasksNPM(gulp, options);
             break;
       }
    }
-}
+};

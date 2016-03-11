@@ -13,12 +13,12 @@ Sub Tasks
     jspm-dl-loader
     jspm-inspect
     jspm-install
+    jspm-test-basic
     local-test
     npm-install
     npm-list-depth-0
     npm-outdated
-    npm-run-test-script
+    npm-run-build
     npm-uninstall
-    test-basic
     verify-test
 

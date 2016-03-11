@@ -1,0 +1,6 @@
+{
+   "title": "typhonjs-core-gulptasks",
+   "source": "src",
+   "destination": "docs",
+   "manual": { "changelog": ["./CHANGELOG.md"] }
+}
