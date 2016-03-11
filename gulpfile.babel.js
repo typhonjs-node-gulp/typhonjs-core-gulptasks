@@ -11,11 +11,7 @@ import gulpTasks     from './src/index.js';
 import taskListing   from 'gulp-task-listing';
 
 // Loads all tasks
-gulpTasks(gulp,
-{
-   rootPath: __dirname,
-   srcGlob: ['./src/index.js', './src/tasks/**/*.js']
-});
+gulpTasks(gulp, { rootPath: __dirname, srcGlob: ['./src/index.js', './src/tasks/**/*.js'] });
 
 /**
  * Generates task listing
