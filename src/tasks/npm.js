@@ -1,6 +1,4 @@
 import cp   from 'child_process';
-import fs   from 'fs-extra';
-import path from 'path';
 
 /**
  * Provides Gulp tasks for working with the NPM CLI.
@@ -72,37 +70,6 @@ export default function(gulp, options)
    });
 
    options.loadedTasks.push('npm-outdated');
-
-   // Load any package.json in `rootPath` and add Gulp tasks to invoke any script entries.
-
-   const packageJSONPath = `${rootPath}${path.sep}package.json`;
-
-   if (fs.existsSync(packageJSONPath))
-   {
-      const packageJSON = require(packageJSONPath);
-
-      // If a scripts entry exists then create Gulp tasks to invoke them.
-      if (typeof packageJSON.scripts === 'object')
-      {
-         Object.keys(packageJSON.scripts).forEach((element) =>
-         {
-            /**
-             * Runs `npm run <script name>` via NPM CLI.
-             */
-            gulp.task(`npm-run-${element}`, (cb) =>
-            {
-               cp.exec(`npm run ${element}`, { cwd: rootPath }, (err, stdout, stderr) =>
-               {
-                  console.log(stdout);
-                  console.log(stderr);
-                  cb(err);
-               });
-            });
-
-            options.loadedTasks.push(`npm-run-${element}`);
-         });
-      }
-   }
 
    /**
     * Runs `npm uninstall <package>` via NPM CLI for all node modules installed.

@@ -1,8 +1,7 @@
 import { argv }            from 'yargs';
-import { exec }            from 'child_process';
+import cp                  from 'child_process';
 import fs                  from 'fs-extra';
 import path                from 'path';
-import runSequence         from 'run-sequence';
 import stripJsonComments   from 'strip-json-comments';
 import vm                  from 'vm';
 
@@ -27,12 +26,6 @@ import vm                  from 'vm';
  * `jspm-inspect` - Runs `jspm inspect` via JSPM CLI.
  *
  * `jspm-install` - Runs `jspm install` via JSPM CLI.
- *
- * `jspm-test-basic` - Runs tasks `eslint` and `jspm-bundle` in memory build. Useful for basic testing and Travis CI for
- * JSPM projects. If `eslint` task is not available then this task is hidden.
- *
- * `jspm-test-basic-git-push` - Runs `git push` via CLI, but only if the task `jspm-test-basic`
- * (`eslint` & `jspm-bundle`) completes successfully.
  *
  * @param {object}   gulp     - An instance of Gulp.
  * @param {object}   options  - Optional parameters
@@ -271,7 +264,7 @@ export default function(gulp, options)
          // Execute `git commit` and continue silently if this fails.
          try
          {
-            exec("git commit -m 'Removed extra data from JSPM config' config.js", { cwd: rootPath },
+            cp.exec("git commit -m 'Removed extra data from JSPM config' config.js", { cwd: rootPath },
              (err, stdout, stderr) =>
             {
                console.log(stdout);
@@ -290,7 +283,7 @@ export default function(gulp, options)
     */
    gulp.task('jspm-dl-loader', (cb) =>
    {
-      exec('jspm dl-loader', { cwd: rootPath }, (err, stdout, stderr) =>
+      cp.exec('jspm dl-loader', { cwd: rootPath }, (err, stdout, stderr) =>
       {
          console.log(stdout);
          console.log(stderr);
@@ -305,7 +298,7 @@ export default function(gulp, options)
     */
    gulp.task('jspm-inspect', (cb) =>
    {
-      exec('jspm inspect', { cwd: rootPath }, (err, stdout, stderr) =>
+      cp.exec('jspm inspect', { cwd: rootPath }, (err, stdout, stderr) =>
       {
          console.log(stdout);
          console.log(stderr);
@@ -320,7 +313,7 @@ export default function(gulp, options)
     */
    gulp.task('jspm-install', (cb) =>
    {
-      exec('jspm install', { cwd: rootPath }, (err, stdout, stderr) =>
+      cp.exec('jspm install', { cwd: rootPath }, (err, stdout, stderr) =>
       {
          console.log(stdout);
          console.log(stderr);
@@ -329,46 +322,6 @@ export default function(gulp, options)
    });
 
    options.loadedTasks.push('jspm-install');
-
-   // Only add task if eslint task is also included.
-   if (options.importTasks.indexOf('eslint') >= 0)
-   {
-      /**
-       * Runs tasks `eslint` and `jspm-bundle` in memory build. Useful for basic testing and Travis CI for
-       * JSPM projects. If `eslint` task is not available then this task is hidden.
-       */
-      gulp.task('jspm-test-basic', (cb) =>
-      {
-         // Set TRAVIS environment variable to run all tasks in testing mode.
-         process.env.TRAVIS = true;
-
-         const runSequenceLocal = runSequence.use(gulp);
-         runSequenceLocal('eslint', 'jspm-bundle', cb);
-      });
-
-      options.loadedTasks.push('jspm-test-basic');
-
-
-      if (options.importTasks.indexOf('git') >= 0)
-      {
-         /**
-          * Runs "git push", but only if the test task `jspm-test-basic` (`eslint` & `jspm-bundle`) complete
-          * successfully.
-          */
-         gulp.task('jspm-test-basic-git-push', ['jspm-test-basic'], (cb) =>
-         {
-            // Execute git push.
-            exec('git push', { cwd: rootPath }, (err, stdout, stderr) =>
-            {
-               console.log(stdout);
-               console.log(stderr);
-               cb(err);
-            });
-         });
-
-         options.loadedTasks.push('jspm-git-push');
-      }
-   }
 }
 
 /**
@@ -391,12 +344,17 @@ const s_BUILDER_BUNDLE = (jspm, buildType, inMemoryBuild, srcFilename, destDir, 
    {
       if (!inMemoryBuild)
       {
-         if (!fs.existsSync(destDir))
-         {
-            fs.mkdirsSync(destDir);
-         }
+         fs.ensureDirSync(destDir);
 
-         if (!fs.existsSync(destDir))
+         try
+         {
+            if (!fs.statSync(destDir).isDirectory())
+            {
+               console.error(`Could not create destination directory: ${destDir}`);
+               reject();
+            }
+         }
+         catch (err)
          {
             console.error(`Could not create destination directory: ${destDir}`);
             reject();

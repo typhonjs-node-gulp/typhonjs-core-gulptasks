@@ -1,11 +1,13 @@
-import cp            from 'child_process';
-import os            from 'os';
+import cp               from 'child_process';
+import os               from 'os';
 
-import tasksElectron from './tasks/electron.js';
-import tasksESDoc    from './tasks/esdoc.js';
-import tasksESLint   from './tasks/eslint.js';
-import tasksJSPM     from './tasks/jspm.js';
-import tasksNPM      from './tasks/npm.js';
+import tasksElectron    from './tasks/electron.js';
+import tasksESDoc       from './tasks/esdoc.js';
+import tasksESLint      from './tasks/eslint.js';
+import tasksJSPM        from './tasks/jspm.js';
+import tasksJSPMTest    from './tasks/jspm-test.js';
+import tasksNPM         from './tasks/npm.js';
+import tasksNPMScripts  from './tasks/npm-scripts.js';
 
 /**
  * Requires all Gulp tasks.
@@ -17,9 +19,12 @@ import tasksNPM      from './tasks/npm.js';
  * Additional optional parameters include:
  * `configDir` - the directory where configuration files for various tasks such as `jspm-bundle` are stored.
  *
- * `importTasks` -  may be supplied which specifies which categories of tasks to require. This allows only exposing
+ * `importTasks` - An array of strings which specifies which categories of tasks to load. This allows only exposing
  * certain tasks that are relevant for a given project. For instance several TyphonJS Node packages only use `eslint`
- * and `npm`. Available task categories include: 'electron', 'esdoc', 'eslint', 'git', 'jspm' and 'npm'.
+ * and `npm`. Available task categories include: 'electron', 'esdoc', 'eslint', 'jspm', 'jspm-test', 'npm' and
+ * 'npm-scripts'.
+ *
+ * `excludeTasks` - An array of strings which specifies particular categories of tasks to exclude.
  *
  * It should be noted that `typhonjs-core-gulptasks` does not include dependencies for ESDoc, ESLint or JSPM. If
  * these dependencies are missing from `package.json` / `node_modules` then the associated Gulp tasks for each do not
@@ -36,25 +41,31 @@ export default function(gulp, options)
 {
    options =                  options || {};
    options.configDir =        options.configDir || 'config';
-   options.importTasks =      options.importTasks || ['electron', 'esdoc', 'eslint', 'git', 'jspm', 'npm'];
+   options.importTasks =      options.importTasks || ['electron', 'esdoc', 'eslint', 'jspm', 'jspm-test', 'npm',
+                                                      'npm-scripts'];
+   options.excludeTasks =     options.excludeTasks || [];
 
    options.loadedTasks =      [];   // Stores loaded task names.
    options.topLevelModules =  {};   // Stores top level module info.
 
    const rootPath =           options.rootPath;
 
-   // Remove git task from options.importTasks if error is raised when invoking `git --version` via CLI.
+   // Remove any tasks defined in `options.excludeTasks`.
+   for (let cntr = 0; cntr < options.excludeTasks.length; cntr++)
+   {
+      const removeIndex = options.importTasks.indexOf(options.excludeTasks[cntr]);
+      if (removeIndex >= 0) { options.importTasks.splice(removeIndex, 1); }
+   }
+
+   // Add `git` to `options.importTasks` if error is not raised when invoking `git --version` via CLI.
    try
    {
       cp.execSync('git --version', { cwd: rootPath, encoding: 'utf8' });
+      options.importTasks.push('git');
    }
-   catch (err)
-   {
-      const gitIndex = options.importTasks.indexOf('git');
-      if (gitIndex >= 0) { options.importTasks.splice(gitIndex, 1); }
-   }
+   catch (err) { /* ... */ }
 
-   // Remove npm tasks from options.importTasks if error is raised when invoking `npm version` via CLI.
+   // Remove npm tasks from `options.importTasks` if error is raised when invoking `npm version` via CLI.
    try
    {
       cp.execSync('npm version', { cwd: rootPath, encoding: 'utf8' });
@@ -63,6 +74,9 @@ export default function(gulp, options)
    {
       const npmIndex = options.importTasks.indexOf('npm');
       if (npmIndex >= 0) { options.importTasks.splice(npmIndex, 1); }
+
+      const npmScriptIndex = options.importTasks.indexOf('npm-scripts');
+      if (npmScriptIndex >= 0) { options.importTasks.splice(npmScriptIndex, 1); }
    }
 
    // Parses top level modules installed in `node_modules` and provides an object hash of name -> version in
@@ -120,8 +134,16 @@ const s_REQUIRE_TASKS = (gulp, options) =>
             tasksJSPM(gulp, options);
             break;
 
+         case 'jspm-test':
+            tasksJSPMTest(gulp, options);
+            break;
+
          case 'npm':
             tasksNPM(gulp, options);
+            break;
+
+         case 'npm-scripts':
+            tasksNPMScripts(gulp, options);
             break;
       }
    }

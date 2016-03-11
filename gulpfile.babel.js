@@ -10,7 +10,7 @@ import gulpTasks     from './src/index.js';
 
 import taskListing   from 'gulp-task-listing';
 
-// require all tasks
+// Loads all tasks
 gulpTasks(gulp,
 {
    rootPath: __dirname,
