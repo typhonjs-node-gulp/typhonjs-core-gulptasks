@@ -28,7 +28,7 @@
       "gulp-task-listing": "^1.0.0",
       "jspm": "^0.16.0",
       "typhonjs-config-eslint": "^0.4.0",
-      "typhonjs-npm-build-test": "^0.0.10"
+      "typhonjs-npm-build-test": "^0.1.0"
    },
    "main": "dist/index.js",
    "engines" : {

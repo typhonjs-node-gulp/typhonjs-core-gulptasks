@@ -5,7 +5,7 @@
 
 - Removed dependencies for esdoc, eslint and jspm.
 
-- Tasks now require dependencies for esdoc, eslint and jspm to be included separately for tasks to be loaded.
+- Tasks now require dependencies for esdoc, eslint and jspm to be included separately for tasks to be loaded please see [typhonjs-npm-build-test](https://www.npmjs.com/package/typhonjs-npm-build-test) for an all inclusive NPM module to pair with `typhonjs-core-gulptasks`.
 
 - `esdoc` task will load `.esdocrc` or `esdoc.json`; TyphonJS now standardizes on `.esdocrc`. 
 
