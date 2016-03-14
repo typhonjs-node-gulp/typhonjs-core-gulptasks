@@ -25,8 +25,7 @@ https://www.npmjs.com/package/electron-packager#programmatic-api
   - [electron-start-debug](https://github.com/typhonjs-node-gulp/typhonjs-core-gulptasks/blob/master/src/tasks/electron.js#L65) - Spawns `electron --debug=5858 .` starting the app defined in `package.json->main` entry in the root path. 
 
 - `esdocs`:
-  - [esdocs](https://github.com/typhonjs-node-gulp/typhonjs-core-gulptasks/blob/master/src/tasks/esdoc.js#L56) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [esdoc](https://www.npmjs.com/package/esdoc) which must be installed separately. Consider using [typhonjs-npm-build-test](https://www.npmjs.com/package/typhonjs-npm-build-test) as a dev dependency for [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm), [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace), [esdoc-importpath-plugin](https://www.npmjs.com/package/esdoc-importpath-plugin) and
-[esdoc-es7-plugin](https://www.npmjs.com/package/esdoc-es7-plugin) support and outputs to the location specified by `.esdocrc` or `esdoc.json`.
+  - [esdocs](https://github.com/typhonjs-node-gulp/typhonjs-core-gulptasks/blob/master/src/tasks/esdoc.js#L56) - Creates ES6 documentation with [ESDocs](https://esdoc.org/) via [esdoc](https://www.npmjs.com/package/esdoc) which must be installed separately outputting to the location specified by `.esdocrc` or `esdoc.json`. Consider using [typhonjs-npm-build-test](https://www.npmjs.com/package/typhonjs-npm-build-test) as a dev dependency for [esdoc-plugin-jspm](https://www.npmjs.com/package/esdoc-plugin-jspm) and [esdoc-plugin-extends-replace](https://www.npmjs.com/package/esdoc-plugin-extends-replace) support.
 
 - `eslint`:
   - [eslint](https://github.com/typhonjs-node-gulp/typhonjs-core-gulptasks/blob/master/src/tasks/eslint.js#L33) - Runs [ESLint](http://eslint.org/) via [eslint](https://www.npmjs.com/package/eslint) using `.eslintrc` outputting to console and failing on any errors. Consider using [typhonjs-npm-build-test](https://www.npmjs.com/package/typhonjs-npm-build-test) as a dev dependency which includes `eslint` as a dependency.
@@ -74,7 +73,7 @@ First include it as an entry in `devDependencies` in `package.json`:
     "gulp": "^3.9.0",
     "jspm": "^0.16.0",
     "typhonjs-core-gulptasks": "^0.6.0",
-    "typhonjs-npm-build-test": "^0.0.10"
+    "typhonjs-npm-build-test": "^0.1.0"
   }
 }
 ```
